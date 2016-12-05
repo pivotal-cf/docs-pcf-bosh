@@ -3,18 +3,18 @@
   ".": 
 :production_host: hello
 :subnav_templates:
-  myservice: myservice_subnav
+  pcfbosh: pcfbosh_subnav
 :template_variables: 
-:local_repo_dir: "/Users/pivotal/workspace/docs-partners-template"
+:local_repo_dir: "/Users/pivotal/workspace/docs-pcf-bosh"
 :workspace: !ruby/object:Pathname
-  path: "/Users/pivotal/workspace/docs-partners-template/docs-book/output/master_middleman/source"
+  path: "/Users/pivotal/workspace/docs-pcf-bosh/docs-book/output/master_middleman/source"
 :feedback_enabled: 
 :repo_link_enabled: true
 :repo_links:
-  myservice:
+  pcfbosh:
     repo: docs-content
     ref: master
     at_path: 
 :product_info:
-  myservice: {}
+  pcfbosh: {}
 :elastic_search: false

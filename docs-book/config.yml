@@ -7,7 +7,7 @@ repo_link_enabled: true
 
 pcf_header: &local_pcf
   use_local_header: true
-  latest_stable_version: 1.7
+  latest_stable_version: 1.8
   changelog_href: http://docs.pivotal.io/pivotalcf/pcf-release-notes/
   local_header_img: /images/cloud_rings.png
   local_header_title: Pivotal Cloud Foundry
@@ -16,8 +16,8 @@ public_host: hello
 sections:
   - repository:
       name: docs-content
-    directory: myservice
-    subnav_template: myservice_subnav.erb       
+    directory: pcfbosh
+    subnav_template: pcfbosh_subnav.erb       
 
 template_variables:                             # optional
 
