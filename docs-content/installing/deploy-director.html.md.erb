@@ -4,3 +4,17 @@ owner: PCF BOSH
 ---
 
 <strong><%= modified_date %></strong>
+
+This topic describes how to deploy the BOSH Director, the first step in installing PCF BOSH. 
+
+The Director is the core orchestrating component in BOSH. The Director controls VM creation and deployment, as well as other software and service lifecycle events. For more information, see the [BOSH documentation](https://bosh.io/docs/bosh-components.html#director). 
+
+##<a id='prepare'></a> Step 1: Prepare Your Environment
+
+Before deploying the BOSH Director, you must prepare your environment for PCF BOSH by creating the necessary resources.
+
+Pivotal recommends using [Terraform](https://www.terraform.io/) to prepare your environment. Terraform is an open-source tool that automates infrastructure configuration. 
+
+The Terraform scripts required to prepare your environment will vary depending on your IaaS. Refer to the Terraform [scripts](https://github.com/pivotal-cf/pcf-bosh-terraforming-gcp) for preparing Google Cloud Platform as a model.
+
+##<a id='deploy-bosh'></a> Step 2: Deploy BOSH Director
