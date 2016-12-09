@@ -1,11 +1,11 @@
 ---
-title: Building the Reference Pipeline
+title: Building a Pipeline
 owner: PCF BOSH
 ---
 
 <strong><%= modified_date %></strong>
 
-This topic provides a reference Concourse pipeline configuration to automate your PCF BOSH deployment, and explains what each part of the pipeline does.
+This topic explains how to build a reference Concourse pipeline  to automate your PCF BOSH deployment.
 
 ##<a id='reqs'></a> Requirements
 
@@ -13,12 +13,36 @@ You must do the following before building the reference  pipeline:
 
 * Deploy a BOSH-managed Concourse by completing the procedures in the [Deploy Concourse](deploy-concourse.html) topic.
 * [Download](https://concourse.ci/downloads.html) `fly`, the CLI tool for Concourse. If you are on Linux or OS X, you must `chmod +x` the downloaded binary and put it in your `$PATH`.
-* [Download](pipeline.yml) the YAML file that contains the reference pipeline configuration. This is the reference pipeline described in the sections below. You can further customize the configuration to meet your needs.
 * Create a GitHub repo to host your Concourse pipeline configuration.
 * Create a Docker Hub repo to host a Docker image.
 
-Steps: Download the YAML.
-Make a credentials file.
-Make a Dockerfile.
-Push the YAML as a pipeline.
+<strong><%= modified_date %></strong>
 
+This topic provides a reference Concourse pipeline configuration to automate your PCF BOSH deployment, and explains what each part of the pipeline does.
+
+##<a id='understand'></a> Understand Concourse Pipelines
+
+A Concourse pipeline is a collection of jobs and resources. Jobs determine the actions performed by the pipeline, while resources are the objects used by those jobs. For more information, see the [Mechanics of a Pipeline](https://concourse.ci/pipeline-mechanics.html) topic in the Concourse documentation.
+
+A pipeline is configured by a YAML file. The Concourse web interface visualizes the pipeline configuration as a series of jobs and resources. In the web interface, the reference pipeline configuration you downloaded above looks like the following: 
+
+<%= image_tag('pipeline.png') %>
+
+<p class="note"><strong>Note</strong>: Click <a href="./images/pipeline.png">here</a> to see a larger version of this image.</p>
+
+The following sections explain what each part of the pipeline does, proceeding from left to right. Each section corresponds to a set of manual steps described in the [Installing and Configuring](../installing/) topics.
+
+##<a id='prepare'></a> Step 1: Prepare Your Environment
+
+The first part of the pipeline prepares your environment for PCF BOSH.
+
+<%= image_tag('pipeline-prepare-env.png') %>
+
+This part of the pipeline contains the following jobs:
+
+* `terraform-up` runs a Terraform script, composed from the variables pr, to prepare the environment.
+* `minimal-docker-image`: This job
+
+ contains the following:
+* Three resources:
+* Two jobs 
