@@ -19,8 +19,8 @@ Edit the subnav at [`docs-book/master_middleman/source/subnavs/pcfbosh_subnav.er
 Install Bookbinder by running `gem install bookbindery`.
 
 You can use Bookbinder to 
-* [View](#view) a live version of these docs on your local machine while editing
-* [Publish](#publish) publish your documentation changes 
+* [View](#view) a live version of these docs on your local machine while editing.
+* [Publish](#publish) your documentation changes.
 
 ### <a id='view'></a> View Docs
 
