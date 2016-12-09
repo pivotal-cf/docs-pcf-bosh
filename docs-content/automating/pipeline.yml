@@ -1,0 +1,220 @@
+---
+resource_types:
+- name: terraform
+  type: docker-image
+  source:
+    repository: ljfranklin/terraform-resource
+
+- name: gcs-resource
+  type: docker-image
+  source:
+    repository: frodenas/gcs-resource
+
+resources:
+- name: pcf-bosh-ci
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/pcf-bosh-ci
+    branch: master
+    private_key: {{pcf-bosh-ci_deploy_key}}
+
+- name: cf-deployment
+  type: git
+  source:
+    uri: https://github.com/cloudfoundry/cf-deployment
+    branch: master
+
+- name: cf-acceptance-tests
+  type: git
+  source:
+    uri: https://github.com/cloudfoundry/cf-acceptance-tests
+    branch: master
+
+- name: minimal-dockerfile
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/pcf-bosh-ci
+    private_key: {{pcf-bosh-ci_deploy_key}}
+    paths: [Dockerfile]
+    branch: master
+
+- name: minimal-docker-image
+  type: docker-image
+  source:
+    repository: pcfbosh/minimal
+    username: {{dockerhub_username}}
+    password: {{dockerhub_password}}
+
+- name: terraforming-gcp
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/pcf-bosh-terraforming-gcp
+    private_key: {{pcf-bosh-terraforming-gcp_deploy_key}}
+    branch: master
+
+- name: bosh-deployment
+  type: git
+  source:
+    uri: https://github.com/cloudfoundry/bosh-deployment
+    branch: master
+
+- name: terraform-state
+  type: terraform
+  source:
+    storage:
+      bucket: pcf-bosh-ci
+      bucket_path: terraform-environments
+      access_key_id: {{gcs_access_key_id}}
+      secret_access_key: {{gcs_secret_access_key}}
+      endpoint: storage.googleapis.com
+  delete_on_failure: true
+
+- name: bosh-state
+  type: gcs-resource
+  source:
+    bucket: pcf-bosh-ci
+    json_key: {{google_json_key}}
+    versioned_file: bosh-state.json
+
+- name: bosh-creds
+  type: gcs-resource
+  source:
+    bucket: pcf-bosh-ci
+    json_key: {{google_json_key}}
+    versioned_file: bosh-creds.yml
+
+- name: cf-creds
+  type: gcs-resource
+  source:
+    bucket: pcf-bosh-ci
+    json_key: {{google_json_key}}
+    versioned_file: cf-creds.yml
+
+- name: cf-cats-config
+  type: gcs-resource
+  source:
+    bucket: pcf-bosh-ci
+    json_key: {{google_json_key}}
+    versioned_file: cf-cats-config.json
+
+- name: terraform-vars
+  type: gcs-resource
+  source:
+    bucket: pcf-bosh-ci
+    json_key: {{google_json_key}}
+    versioned_file: terraform.tfvars.yml
+
+- name: bosh-vars
+  type: gcs-resource
+  source:
+    bucket: pcf-bosh-ci
+    json_key: {{google_json_key}}
+    versioned_file: bosh-vars.yml
+
+- name: credhub-release
+  type: gcs-resource
+  source:
+    bucket: pcf-bosh-ci
+    json_key: {{google_json_key}}
+    versioned_file: credhub-0.3.0.tgz
+
+- name: stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-google-kvm-ubuntu-trusty-go_agent
+
+jobs:
+- name: minimal-docker-image
+  public: true
+  plan:
+  - get: minimal-dockerfile
+    trigger: true
+  - put: minimal-docker-image
+    params:
+      build: minimal-dockerfile
+
+- name: terraform-up
+  plan:
+  - aggregate:
+    - get: terraforming-gcp
+    - get: terraform-vars
+  - put: terraform-state
+    params:
+      var_file: terraform-vars/terraform.tfvars.yml
+      terraform_source: terraforming-gcp
+      delete_on_failure: true
+      env_name: ol-smokey
+
+- name: deploy-director
+  plan:
+  - aggregate:
+    - get: pcf-bosh-ci
+    - get: bosh-deployment
+    - get: bosh-state
+    - get: bosh-creds
+    - get: bosh-vars
+    - get: credhub-release
+    - get: terraform-state
+      trigger: true
+      passed: [terraform-up]
+  - task: deploy-director
+    file: pcf-bosh-ci/tasks/deploy-director/task.yml
+    ensure:
+      aggregate:
+      - put: bosh-state
+        params:
+          file: new-bosh-state/*
+      - put: bosh-creds
+        params:
+          file: new-bosh-creds/*
+
+- name: upload-cloud-config
+  plan:
+  - aggregate:
+    - get: pcf-bosh-ci
+    - get: bosh-creds
+      trigger: true
+      passed: [deploy-director]
+  - task: upload-cloud-config
+    file: pcf-bosh-ci/tasks/upload-cloud-config/task.yml
+
+- name: upload-stemcell
+  plan:
+  - aggregate:
+    - get: pcf-bosh-ci
+    - get: stemcell
+    - get: bosh-creds
+      trigger: true
+      passed: [deploy-director]
+  - task: upload-stemcell
+    file: pcf-bosh-ci/tasks/upload-stemcell/task.yml
+
+- name: deploy-pcf
+  plan:
+  - aggregate:
+    - get: pcf-bosh-ci
+    - get: cf-deployment
+    - get: cf-creds
+    - get: bosh-creds
+      trigger: true
+      passed: [upload-cloud-config, upload-stemcell]
+  - task: deploy-pcf
+    file: pcf-bosh-ci/tasks/deploy-pcf/task.yml
+    ensure:
+        put: cf-creds
+        params:
+          file: new-cf-creds/*
+
+- name: run-cats
+  plan:
+  - aggregate:
+    - get: pcf-bosh-ci
+    - get: cf-acceptance-tests
+    - get: cf-cats-config
+    - get: cf-creds
+      trigger: true
+      passed: [deploy-pcf]
+  - task: enable-diego-docker
+    file: pcf-bosh-ci/tasks/enable-diego-docker/task.yml
+  - task: run-cats
+    file: pcf-bosh-ci/tasks/run-cats/task.yml

@@ -1,22 +1,24 @@
 ---
-title: Building a Pipeline
+title: Building the Reference Pipeline
 owner: PCF BOSH
 ---
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to build a Concourse pipeline to automate your PCF BOSH deployment.
+This topic provides a reference Concourse pipeline configuration to automate your PCF BOSH deployment, and explains what each part of the pipeline does.
 
-A Concourse pipeline 
+##<a id='reqs'></a> Requirements
 
-To perform the procedures below, you must have deployed Concourse by completing the procedures in the [Deploy Concourse](deploy-concourse.html) topic.
+You must do the following before building the reference  pipeline:
 
+* Deploy a BOSH-managed Concourse by completing the procedures in the [Deploy Concourse](deploy-concourse.html) topic.
+* [Download](https://concourse.ci/downloads.html) `fly`, the CLI tool for Concourse. If you are on Linux or OS X, you must `chmod +x` the downloaded binary and put it in your `$PATH`.
+* [Download](pipeline.yml) the YAML file that contains the reference pipeline configuration. This is the reference pipeline described in the sections below. You can further customize the configuration to meet your needs.
+* Create a GitHub repo to host your Concourse pipeline configuration.
+* Create a Docker Hub repo to host a Docker image.
 
+Steps: Download the YAML.
+Make a credentials file.
+Make a Dockerfile.
+Push the YAML as a pipeline.
 
-deploy Concourse, a CI/CD pipeline solution
-
-The pipelines offered here are for reference only. 
-
-
-
-As a reference: this is what each step in the pipeline does. What resources each step uses and the manual steps it would require to do each step.

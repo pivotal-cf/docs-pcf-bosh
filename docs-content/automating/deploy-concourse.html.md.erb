@@ -45,4 +45,5 @@ After deploying a BOSH Director, you can create a BOSH-managed Concourse deploym
 	<pre class="terminal">$ bosh deploy</pre>
 1. After the deploy command completes, list your deployments to confirm that Concourse has successfully deployed:
 	<pre class="terminal">$ bosh deployments</pre>
+1. Navigate to the Concourse web interface to confirm that it successfully displays. The URL of the web interface is the value for the `external_url` property in the Concourse deployment manifest.
 1. Continue to the [Building a Pipeline](build-pipeline.html) topic.
