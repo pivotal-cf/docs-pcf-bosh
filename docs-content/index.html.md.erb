@@ -5,19 +5,21 @@ owner: PCF BOSH
 
 <strong><%= modified_date %></strong>
 
-##<a id='overview'></a> Overview
-
 PCF BOSH is a BOSH-native experience for deploying Pivotal Cloud Foundry (PCF), a cloud computing platform as a service.
 
-###<a id='pcf'></a> What is PCF?
+## Overview
 
-###<a id='bosh'></a> What is BOSH?
+The Overview section explains what PCF BOSH is and how it works.
 
-###<a id='pcf-bosh'></a> What is PCF BOSH?
+* <a href="/pcfbosh/overview/what-pcf.html">What is PCF?</a>
+* <a href="/pcfbosh/overview/what-bosh.html">What is BOSH?</a>
+* <a href="/pcfbosh/overview/what-pcf-bosh.html">What is PCF BOSH?</a>
 
-##<a id='installing'></a> Installing and Configuring
+## Installing and Configuring
 
-Perform the procedures in the following topics to install and configure PCF BOSH:
+The Installing and Configuring section describes how to install and configure PCF BOSH. Each topic captures a discrete step in the deployment procedure. After completing the final topic, you will have successfully deployed PCF BOSH.
+
+Instead of performing the procedures manually, you can also automate the installation and configuration process with CI/CD pipelines. See the <a href="#automating">Automating</a> section below for more information.
 
 * Step 1: <a href="/pcfbosh/installing/prepare-env.html">Preparing Your Environment</a>
 * Step 2: <a href="/pcfbosh/installing/deploy-director.html">Deploying the BOSH Director</a>
@@ -25,11 +27,9 @@ Perform the procedures in the following topics to install and configure PCF BOSH
 * Step 4: <a href="/pcfbosh/installing/upload-stemcell.html">Uploading the Stemcell</a>
 * Step 5: <a href="/pcfbosh/installing/ert.html">Configuring and Installing Elastic Runtime</a>
 
-<p class="note"><strong>Note</strong>: For more information about automating the installation and configuration process with CI/CD pipelines, see the <a href="#automating">Automating</a> section below.</p>
+## Managing and Troubleshooting
 
-##<a id='managing'></a> Managing and Troubleshooting
-
-Refer to the following topics for information about how to manage and troubleshoot PCF BOSH.
+The Managing and Troubleshooting section describes how to manage a PCF BOSH deployment and how to troubleshoot issues that arise when installing or running a deployment.
 
 * <a href="/pcfbosh/managing/ssh.html">SSHing into BOSH-Deployed Instances</a>
 * <a href="/pcfbosh/managing/creds.html">Discovering Credentials</a>
@@ -37,16 +37,16 @@ Refer to the following topics for information about how to manage and troublesho
 * <a href="/pcfbosh/managing/tasks.html">Monitoring BOSH Director Tasks</a>
 * <a href="/pcfbosh/managing/status.html">Monitoring BOSH Deployment Status</a>
 
-##<a id='upgrading'></a> Upgrading
+## Upgrading
 
-Perform the procedures in the following topics to upgrade PCF BOSH:
+The Upgrading section explains how to upgrade the components of PCF BOSH from one version to another.
 
 * <a href="/pcfbosh/upgrading/upgrade-bosh.html">Upgrading the BOSH Director</a>
 * <a href="/pcfbosh/upgrading/upgrade-ert.html">Upgrading Elastic Runtime</a>
 
-##<a id='automating'></a> Automating
+## Automating
 
-Refer to the following topics for information about how to automate your PCF BOSH deployment:
+The Automating section describes how to automate the installation and configuration of a PCF BOSH deployment with a CI/CD solution called Concourse.
 
 * <a href="/pcfbosh/automating/pipelines.html">Building a Pipeline</a>
 
