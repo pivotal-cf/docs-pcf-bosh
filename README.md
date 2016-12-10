@@ -36,6 +36,6 @@ To use Bookbinder to view your documentation, perform the following steps:
 1. On your local machine, `cd` into `docs-book` in the cloned repo.
 1. Run `bookbinder bind local` to build a Rack web-app of the book. 
 1. `cd` into the `final_app` directory.
-1. Run `cf push pcfbosh`. You must be logged in to PWS and be targeting the correct org and space.
+1. Run `cf push pcfbosh -b https://github.com/cloudfoundry/ruby-buildpack#v1.6.28`. You must be logged in to PWS and be targeting the correct org and space.
 
 After the push command has completed, view the docs at https://pcfbosh.cfapps.io. 
