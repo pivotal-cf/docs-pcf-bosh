@@ -16,11 +16,11 @@ Edit the subnav at [`docs-book/master_middleman/source/subnavs/pcfbosh_subnav.er
 
 [Bookbinder](https://github.com/pivotal-cf/bookbinder/blob/master/README.md) is a command-line utility for stitching Markdown docs into a hostable web app.
 
-Install Bookbinder by running `gem install bookbindery`.
-
 You can use Bookbinder to 
 * [View](#view) a live version of these docs on your local machine while editing.
 * [Publish](#publish) your documentation changes.
+
+When you follow the instructions below, you will run `bundle install` which will install the `bookbinder` command line utility for you.
 
 ### <a id='view'></a> View Docs
 
