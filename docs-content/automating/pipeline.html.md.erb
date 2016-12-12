@@ -36,4 +36,7 @@ This part of the pipeline contains the following jobs:
 	* `terraform-vars` is the Terraform variables file that contains information about the GCP environment such as the environment name, the region, and the service account key. In the reference pipeline, this file is retrieved from a Google Cloud Storage bucket.
 	* `terraforming-gcp` is the set of Terraform scripts that the job runs, loading variables from the `terraform-vars` file. These scripts are retrieved from the PCF BOSH Terraforming GCP GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-terraforming-gcp).
 
+	<p class="note"><strong>Note</strong>: To prepare your environment with Terraform scripts manually, see the <a href="../installing/prepare-env.html">Preparing Your Environment</a> topic.</p>
+
 * `minimal-docker-image` builds a Docker image against the `minimal-dockerfile` resource, which is a Dockerfile in the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/Dockerfile). The Dockerfile specifies a `golang` Docker image with a few utilities installed, such as the [BOSH CLI](https://bosh.io/docs/bosh-cli.html), and outputs the image to a Docker Hub repo. Later jobs use this Docker image as their base image. 
+
