@@ -5,6 +5,28 @@ owner: PCF BOSH
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to deploy the BOSH Director, the first step in installing PCF BOSH. 
+This topic describes how to deploy the BOSH Director with a User Account and Authentication (UAA) server and CredHub.
 
-The Director is the core orchestrating component in BOSH. The Director controls VM creation and deployment, as well as other software and service lifecycle events. For more information, see the [BOSH documentation](https://bosh.io/docs/bosh-components.html#director). 
+To perform the procedures in this topic, you must have completed the steps in [Preparing Your Environment](prepare-env.html). After finishing this topic, continue to [Updating the BOSH Director with Cloud Resources Data](update-director.html). 
+
+##<a id='overview'></a> Overview
+
+This topic discusses the following components:
+
+* The **BOSH Director** is the core orchestrating component in BOSH. The Director controls VM creation and deployment, as well as other software and service lifecycle events. For more information, see the [BOSH documentation](https://bosh.io/docs/bosh-components.html#director). 
+
+* **UAA** is a multi-tenant identity management service. By integrating with UAA, the BOSH Director delegates user management to the UAA server. For more information about UAA, see its GitHub [repo](https://github.com/cloudfoundry/uaa).
+
+* **CredHub** is a [BOSH release](https://bosh.io/docs/release.html) that integrates with the BOSH Director to handle credential generation and management. For more information about CredHub, see its GitHub [repo](https://github.com/pivotal-cf/credhub-release).
+
+##<a id='deploy'></a> Step 1: Deploy the BOSH Director</a>
+
+See the [BOSH documentation](https://bosh.io/docs/init.html) for IaaS-specific instructions on how to create a deployment manifest, initialize your environment, and deploy the BOSH Director. After confirming that your BOSH Director is running and reachable, continue to the next step.
+
+##<a id='uaa'></a> Step 2: Configure UAA</a>
+
+See the [BOSH documentation](https://bosh.io/docs/director-users-uaa.html) for instructions on how to configure UAA and integrate it with the BOSH Director. After successfully integrating UAA with the Director, continue to the next step.
+
+##<a id='credhub'></a> Step 3: Configure CredHub
+
+See the CredHub GitHub [repo](https://github.com/pivotal-cf/credhub-release/wiki/CredHub-Integration-with-BOSH-Director-Configuration-Guide) for a guide that describes how to deploy the CredHub release and integrate it with the BOSH Director. After successfully integrating CredHub with the Director, continue to the [Updating the BOSH Director with Cloud Resources Data](update-director.html) topic.
