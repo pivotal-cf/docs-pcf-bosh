@@ -16,11 +16,11 @@ Edit the subnav at [`docs-book/master_middleman/source/subnavs/pcfbosh_subnav.er
 
 [Bookbinder](https://github.com/pivotal-cf/bookbinder/blob/master/README.md) is a command-line utility for stitching Markdown docs into a hostable web app.
 
-You can use Bookbinder to 
+You can use Bookbinder to
 * [View](#view) a live version of these docs on your local machine while editing.
-* [Publish](#publish) your documentation changes.
+* [Publish](#publish) your documentation changes from your local machine to the live docs site.
 
-When you follow the instructions below, you will run `bundle install` which will install the `bookbinder` command line utility for you.
+When you follow the instructions below, you will run `bundle install` locally which will install the `bookbinder` command line utility for you.
 
 ### <a id='view'></a> View Docs
 
@@ -33,8 +33,9 @@ To use Bookbinder to view your documentation, perform the following steps:
 
 ### <a id='publish'></a> Publish Docs
 
+1. Clone this repo to your local machine.
 1. On your local machine, `cd` into `docs-book` in the cloned repo.
-1. Run `bookbinder bind local` to build a Rack web-app of the book. 
+1. Run `bundle install` to make sure you have all the necessary gems installed.
 1. `cd` into the `final_app` directory.
 1. Log into [PEZ HeritageCF](https://apps.run.pez.pivotal.io) and target the appropriate org and space: `cf login -a api.run.pez.pivotal.io -o pivot-agupta -s pcf-bosh --sso`.
 1. Run `cf push pcf-bosh-docs -b ruby_buildpack`.
