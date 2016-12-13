@@ -29,7 +29,7 @@ To use Bookbinder to view your documentation, perform the following steps:
 1. Clone this repo to your local machine.
 1. On your local machine, `cd` into `docs-book` in the cloned repo.
 1. Run `bundle install` to make sure you have all the necessary gems installed.
-1. Run `bookbinder watch` to build an interactive version of the docs and navigate to `localhost:4567/myservice/` in a browser. (It may take a moment for the site to load at first.) This builds a site from your content repo at `docs-content`, and then watches that repo to update the site if you make any changes to the repo.
+1. Run `bookbinder watch` to build an interactive version of the docs and navigate to `localhost:4567/pcfbosh/` in a browser. (It may take a moment for the site to load at first.) This builds a site from your content repo at `docs-content`, and then watches that repo to update the site if you make any changes to the repo.
 
 ### <a id='publish'></a> Publish Docs
 
