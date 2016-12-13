@@ -1,0 +1,23 @@
+---
+title: Applying the Cloud Config
+owner: PCF BOSH
+---
+
+<strong><%= modified_date %></strong>
+
+This topic describes how to create and apply the cloud config, which is a YAML file that defines IaaS-specific configuration used by the BOSH Director and all BOSH deployments.
+
+To perform the procedures in this topic, you must have completed the steps in [Preparing Your Environment](prepare-env.html) and [Deploying the BOSH Director](deploy-director.html). After finishing this topic, continue to [Uploading the Stemcell](upload-stemcell.html). 
+
+##<a id='create'></a> Step 1: Create the Cloud Config
+
+Create a YAML file that contains your cloud config. Consult the following links for reference:
+
+* The example cloud config included in the [BOSH documentation](https://bosh.io/docs/cloud-config.html#example)
+* The cloud config in the PCF BOSH CI [repo](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/cloud-config.yml), which uses Google Cloud Platform as an IaaS
+
+##<a id='apply'></a> Step 2: Apply the Cloud Config
+
+Follow the instructions in the [BOSH documentation](https://bosh.io/docs/cloud-config.html#update) to use the BOSH CLI to update your BOSH Director with the cloud config.
+
+After updating your BOSH Director, run `bosh deploy` to redeploy. When the redeployment finishes, continue to the [Uploading the Stemcell](upload-stemcell.html) topic.
