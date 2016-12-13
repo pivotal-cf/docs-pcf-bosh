@@ -5,7 +5,7 @@ owner: PCF BOSH
 
 <strong><%= modified_date %></strong>
 
-This topic provides a reference [Concourse](https://concourse.ci/introduction.html) pipeline configuration to automate your PCF BOSH deployment, and explains what each part of the pipeline does.
+This topic provides a reference [Concourse](https://concourse.ci/introduction.html) pipeline configuration to automate your Pivotal Cloud Foundry (PCF) deployment, and explains what each part of the pipeline does.
 
 Concourse is a CI/CD solution. For more information about installing Concourse, see the [documentation](https://concourse.ci/installing.html).
 
@@ -31,12 +31,29 @@ The first part of the pipeline prepares your environment for PCF BOSH.
 
 This part of the pipeline contains the following jobs:
 
-* `terraform-up` executes a set of Terraform scripts to prepare a Google Cloud Platform (GCP) environment for PCF BOSH by creating the required resources. The job runs against the following resources:
+* `terraform-up` executes a set of Terraform scripts to prepare a Google Cloud Platform (GCP) environment for PCF. The job runs against the following resources:
 
-	* `terraform-vars` is the Terraform variables file that contains information about the GCP environment such as the environment name, the region, and the service account key. In the reference pipeline, this file is retrieved from a Google Cloud Storage bucket.
+	* `terraform-vars` is the Terraform variables file that contains information about the GCP environment such as the environment name, the region, and the service account key. In the reference pipeline, this file is retrieved from the PCF BOSH CI Google Cloud Storage (GCS) bucket.
 	* `terraforming-gcp` is the set of Terraform scripts that the job runs, loading variables from the `terraform-vars` file. These scripts are retrieved from the PCF BOSH Terraforming GCP GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-terraforming-gcp).
 
 	<p class="note"><strong>Note</strong>: To prepare your environment with Terraform scripts manually, see the <a href="../installing/prepare-env.html">Preparing Your Environment</a> topic.</p>
 
-* `minimal-docker-image` builds a Docker image against the `minimal-dockerfile` resource, which is a Dockerfile in the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/Dockerfile). The Dockerfile specifies a `golang` Docker image with a few utilities installed, such as the [BOSH CLI](https://bosh.io/docs/bosh-cli.html), and outputs the image to a Docker Hub repo. Later jobs use this Docker image as their base image. 
+* `minimal-docker-image` builds a Docker image against the `minimal-dockerfile` resource, which is a Dockerfile in the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci). This [Dockerfile](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/Dockerfile) specifies a `golang` Docker image with a few utilities installed, such as the [BOSH CLI](https://bosh.io/docs/bosh-cli.html), and outputs the image to a Docker Hub repo. Later jobs use this Docker image as their base image. 
 
+##<a id='deploy-director'></a> Deploy the BOSH Director
+
+The second part of the pipeline deploys the BOSH Director, with user management handled by a [User Account and Authentication](https://github.com/cloudfoundry/uaa) (UAA) server and credentials managed by [CredHub](https://github.com/pivotal-cf/credhub-release). 
+
+<%= image_tag('pipeline-deploy-director.png') %>
+
+This part of the pipeline contains the `deploy-director` job. The job executes a shell [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/deploy-director.sh) that uses the BOSH CLI to deploy a BOSH Director with UAA and CredHub on the GCP environment. The script runs on the Docker image created in the previous part of the pipeline, and it runs against the following resources:
+
+* `terraform-state` is the state file outputted by the `terraform-up` job that ran in the previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
+* `bosh-creds` is the file that contains the BOSH Director credentials, retrieved from the GCS bucket. The first time the pipeline runs, this file is blank.
+* `bosh-vars` is the BOSH variables file, retrieved from the GCS bucket. This contains the variables needed to deploy [`bosh-deployment`](https://github.com/cloudfoundry/bosh-deployment), with one addition: `credhub_aes_key`, a 128-bit hex-encoded AES key required for CredHub.
+* `bosh-state` is the state file for your BOSH deployment. The first time the pipeline runs, this file is blank. For more information about deployment state files, see the [BOSH documentation](https://bosh.io/docs/using-bosh-init.html#deployment-state).
+* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/), which contains the [ops files](https://github.com/pivotal-cf/pcf-bosh-ci/tree/master/ops-files) that configure the BOSH deployment manifest for UAA and CredHub. Ops files specify operations to perform on the manifest.
+* `bosh-deployment` is the GitHub [repo](https://github.com/cloudfoundry/bosh-deployment) that contains the BOSH deployment manifest.
+* `credhub-release` is the tarballed CredHub BOSH release, retrieved from the GCS bucket.
+
+<p class="note"><strong>Note</strong>: To deploy the BOSH Director with UAA and CredHub manually, see the <a href="../installing/prepare-env.html">Deploying the BOSH Director</a> topic.</p>
