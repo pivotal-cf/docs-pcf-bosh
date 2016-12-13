@@ -5,6 +5,8 @@ owner: PCF BOSH
 
 This topic describes how to prepare your environment for PCF BOSH by creating the necessary resources.
 
+<p class="note"><strong>Note</strong>: To automate preparing your environment with a CI/CD pipeline, see the <a href="../automating/pipeline.html#prepare">Prepare Your Environment</a> section of the <em>Building a Pipeline</em> topic.</p>
+
 ##<a id='use-terraform'></a>Use Terraform
 
 Pivotal recommends using [Terraform](https://www.terraform.io/) to prepare your environment. Terraform is an open-source tool that automates infrastructure configuration. 
@@ -12,5 +14,3 @@ Pivotal recommends using [Terraform](https://www.terraform.io/) to prepare your 
 The Terraform scripts required to prepare your environment will vary depending on your IaaS. Refer to the Terraform [scripts](https://github.com/pivotal-cf/pcf-bosh-terraforming-gcp) for preparing Google Cloud Platform as a model.
 
 After setting up your environment, continue to the [Deploying the BOSH Director](deploy-director.html) topic.
-
-<p class="note"><strong>Note</strong>: To automate preparing your environment with a CI/CD pipeline, see the <a href="../automating/pipeline.html#prepare">Prepare Your Environment</a> section of the <em>Building a Pipeline</em> topic.</p>
