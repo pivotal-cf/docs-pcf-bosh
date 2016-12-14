@@ -38,7 +38,7 @@ To use Bookbinder to view your documentation, perform the following steps:
 1. Run `bundle install` to make sure you have all the necessary gems installed.
 1. Run `bookbinder bind local` to build a Rack web-app of the book.
 1. `cd` into the `final_app` directory.
-1. Log into [PEZ HeritageCF](https://apps.run.pez.pivotal.io) and target the appropriate org and space: `cf login -a api.run.pez.pivotal.io -o pivot-agupta -s pcf-bosh --sso`.
+1. Log into [PEZ HeritageCF](https://apps.run.pez.pivotal.io) and target the appropriate org and space: `cf login -a api.run.pez.pivotal.io -o pcf-bosh -s pcf-bosh --sso`.
 1. Run `cf push pcf-bosh-docs -b ruby_buildpack`.
 
 After the push command has completed, view the docs at https://pcf-bosh-docs.cfapps.pez.pivotal.io/
