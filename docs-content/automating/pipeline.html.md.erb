@@ -13,7 +13,7 @@ Concourse is a CI/CD solution. For more information about installing Concourse, 
 
 A Concourse pipeline is a collection of jobs and resources. Jobs determine the actions performed by the pipeline, while resources are the objects used by those jobs. For more information, see the [Mechanics of a Pipeline](https://concourse.ci/pipeline-mechanics.html) topic in the Concourse documentation.
 
-View the reference pipeline at the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci). This repo includes YAML files, scripts, a Dockerfile, and the other configuration  needed to build the reference pipeline. 
+View the reference pipeline at the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci). This repo includes YAML files, scripts, and the other configuration  needed to build the reference pipeline. 
 
 The Concourse web interface visualizes the pipeline configuration as a series of jobs and resources. In the web interface, the reference pipeline looks like the following: 
 
@@ -37,8 +37,6 @@ This part of the pipeline contains the following jobs:
 	* `terraforming-gcp` is the set of Terraform scripts that the job runs, loading variables from the `terraform-vars` file. These scripts are retrieved from the PCF BOSH Terraforming GCP GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-terraforming-gcp).
 
 	<p class="note"><strong>Note</strong>: To prepare your environment with Terraform scripts manually, see the <a href="../installing/prepare-env.html">Preparing Your Environment</a> topic.</p>
-
-* `minimal-docker-image` builds a Docker image against the `minimal-dockerfile` resource, which is a Dockerfile in the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci). This [Dockerfile](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/Dockerfile) specifies a `golang` Docker image with a few utilities installed, such as the [BOSH CLI](https://bosh.io/docs/bosh-cli.html), and outputs the image to a Docker Hub repo. Later jobs use this Docker image as their base image. 
 
 ##<a id='deploy-director'></a> Deploy the BOSH Director
 
