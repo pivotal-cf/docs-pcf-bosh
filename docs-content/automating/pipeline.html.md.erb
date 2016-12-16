@@ -44,7 +44,7 @@ The second part of the pipeline deploys the BOSH Director, with user management 
 
 <%= image_tag('pipeline-deploy-director.png') %>
 
-This part of the pipeline contains the `deploy-director` job. The job executes a shell [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/deploy-director.sh) that uses the BOSH CLI to deploy a BOSH Director with UAA and CredHub on the GCP environment. The script runs on the Docker image created in the previous part of the pipeline, and it runs against the following resources:
+This part of the pipeline contains the `deploy-director` job. The job executes a shell [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/deploy-director.sh) that uses the BOSH CLI to deploy a BOSH Director with UAA and CredHub on the GCP environment. The script runs against the following resources:
 
 * `terraform-state` is the state file outputted by the `terraform-up` job that ran in the previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
 * `bosh-creds` is the file that contains the BOSH Director credentials, retrieved from the GCS bucket. The first time the pipeline runs, this file is blank.
@@ -64,7 +64,7 @@ The third part of the pipeline uploads the stemcell and cloud config to the BOSH
 
 This part of the pipeline contains the following jobs:
 
-* `upload-stemcell` executes a shell [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/upload-stemcell.sh) that uses the BOSH CLI to upload the stemcell to the BOSH Director. It runs on the Docker image, against the following resources:
+* `upload-stemcell` executes a shell [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/upload-stemcell.sh) that uses the BOSH CLI to upload the stemcell to the BOSH Director. It runs against the following resources:
 
 	* `bosh-creds` is the file that contains the BOSH Director credentials outputted by the `deploy-director` job, retrieved from the GCS bucket. The shell script executes another [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/scripts/load-director-environment.sh) that loads the credentials into the environment so that the BOSH CLI can upload the stemcell.
 	* `stemcell` is the most recent version of the Google KVM Ubuntu Trusty stemcell, retrieved from [bosh.io](https://bosh.io/stemcells/bosh-google-kvm-ubuntu-trusty-go_agent).  
@@ -72,7 +72,7 @@ This part of the pipeline contains the following jobs:
 
 	<p class="note"><strong>Note</strong>: To upload the stemcell manually, see the <a href="../installing/upload-stemcell.html">Uploading the Stemcell</a> topic.</p>
 
-* `upload-cloud-config` executes a shell [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/upload-cloud-config.sh) that uses the BOSH CLI to upload the cloud config to the BOSH Director. It runs on the Docker image, against the following resources:
+* `upload-cloud-config` executes a shell [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/upload-cloud-config.sh) that uses the BOSH CLI to upload the cloud config to the BOSH Director. It runs against the following resources:
 
 	* `bosh-creds` is the file that contains the BOSH Director credentials outputted by the `deploy-director` job, retrieved from the GCS bucket. The shell script executes another [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/scripts/load-director-environment.sh) that loads the credentials into the environment so that the BOSH CLI can upload the cloud config.
 	* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the `upload-stemcell` job. It also contains the [cloud config](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/cloud-config.yml).
