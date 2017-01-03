@@ -95,3 +95,6 @@ This part of the pipeline contains the `deploy-pcf` job. The job executes a shel
 * `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the `deploy-pcf` job. 
 * `closed-source-releases-zip` is a zip containing the closed-source releases required for Elastic Runtime, retrieved from the GCS bucket. Before the `deploy-pcf` job runs, a task executes a [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/extract-closed-source-releases.sh) that unzips the file into a folder.
 
+<p class="note"><strong>Note</strong>: To deploy Elastic Runtime manually, see the <a href="../installing/ert.html">Configuring and Installing Elastic Runtime</a> topic.</p>
+
+
