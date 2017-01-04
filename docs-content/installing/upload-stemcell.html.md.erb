@@ -5,8 +5,16 @@ owner: PCF BOSH
 
 <strong><%= modified_date %></strong>
 
-##<a id='stemcell-basics'></a> BOSH Stemcell Basics
+This topic describes how to upload the stemcell, which is a versioned operating system image wrapped with IaaS-specific packaging. For more information about stemcells, see the BOSH [documentation](https://bosh.io/docs/stemcell.html).
 
-##<a id='discover'></a> Discover Recommended Stemcells
+To perform the procedures in this topic, you must have completed the steps in [Preparing Your Environment](prepare-env.html), [Deploying the BOSH Director](deploy-director.html), and [Uploading the Stemcell](upload-stemcell.html). After finishing this topic, continue to [Configuring and Installing Elastic Runtime](ert.html).
 
-##<a id='upload'></a> Upload Stemcell to BOSH Director
+##<a id='discover'></a> Step 1: Discover Stemcells
+
+Visit the stemcells [section](https://bosh.io/stemcells) of bosh.io to locate a stemcell for your IaaS.
+
+##<a id='upload'></a> Step 2: Upload Stemcell
+
+Follow the instructions in the BOSH [documentation](https://bosh.io/docs/uploading-stemcells.html) to use the BOSH CLI to upload the stemcell to your BOSH Director.
+
+When finished, continue to the [Configuring and Installing Elastic Runtime](ert.html) topic.
