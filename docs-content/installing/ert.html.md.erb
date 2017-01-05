@@ -9,6 +9,80 @@ This topic describes how to configure and install Elastic Runtime.
 
 To perform the procedures in this topic, you must have completed the steps in [Preparing Your Environment](prepare-env.html), [Deploying the BOSH Director](deploy-director.html), [Applying the Cloud Config](cloud-config.html), and [Uploading the Stemcell](upload-stemcell.html). 
 
-For instructions on how to deploy Cloud Foundry, see the `cf-deployment` GitHub [repo](https://github.com/cloudfoundry/cf-deployment). The repo also contains the Cloud Foundry deployment manifest.
-
 <p class="note"><strong>Note</strong>: To automate deploying Elastic Runtime, see the <a href="../automating/pipeline.html#ert">Deploy Elastic Runtime</a> section of the <em>Building a Pipeline</em> topic.</p>
+
+## <a id='manifest'></a>Step 1: Download the Deployment Manifest ##
+
+Visit the `cf-deployment` GitHub [repo](https://github.com/cloudfoundry/cf-deployment) to download the `0.0.0` version of the canonical Cloud Foundry deployment [manifest](https://github.com/cloudfoundry/cf-deployment/blob/master/cf-deployment.yml#0.0.0).
+
+## <a id='ops-files'></a>Step 2: Select Your Ops Files
+
+Ops files specify operations to perform on the Cloud Foundry deployment manifest. You can use ops files to configure the manifest for Elastic Runtime by adding Pivotal defaults, errands, and products to your deployment.
+
+The following table lists the available ops files and describes the functionality they add to your deployment. The table also specifies whether an ops file is required, recommended, or optional. Visit the `p-ert-bosh-experiment` GitHub [repo](https://github.com/pivotal-cf/p-ert-bosh-experiment) to view all available ops files. 
+
+<table>
+<tr>
+<th>Name</th>
+<th>Purpose</th>
+<th>Status</th>
+</tr>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/pivotal-defaults.yml">Pivotal defaults</a></td>
+<td>This ops file customizes the Cloud Foundry deployment manifest with Elastic Runtime defaults for values such as the number of Diego cell instances or the default application security group.</td>
+<td>Required</td>
+</table>
+
+## <a id='ops-files'></a>Step 3: Select Your Ops Files
+
+Download your required releases.
+
+## <a id='deploy'></a>Step 4: Install Elastic Runtime
+
+To install Elastic Runtime, you use the BOSH CLI to deploy the Cloud Foundry deployment manifest and specify your ops files, variables file, and additional variables.
+
+Perform the following steps to install Elastic Runtime:
+
+1. Create a blank YAML file called `cf-creds.yml`. This will serve as your variables store, where BOSH reads and writes the credentials for Cloud Foundry.
+1. [Download](https://github.com/cloudfoundry/cf-release/releases/tag/v246) the tarballed source code for Cloud Foundry version 246.
+1. Ensure that you are logged in to your BOSH Director.
+1. Construct your deployment command, starting with the following base:
+
+	```
+	bosh -n deploy cf-deployment.yml \
+	--deployment cf \
+	--vars-store cf-creds.yml
+	--var "system_domain=YOUR-SYSTEM-DOMAIN" \
+	--var "apps_domain=YOUR-APPS-DOMAIN" \
+	--var "cf_release_path=PATH-TO-TARBALLED-CF-SOURCE/cf-246*.tgz" \
+	--var "cf_release_version=246.0.2" \
+	```
+
+	To finish constructing your deployment command, specify your ops files with the `--ops-file` flag and provide the variables required by each ops file with the `--var` flag. 
+	<br><br>
+	Consult the following table for the variables required by different ops files.
+
+	<table>
+	<tr>
+	<th>Ops File
+	<th>Required Variables</th>
+	</tr>
+	</tr>
+	<td>TK</td>
+	<td>TK</td>
+	</tr>
+	</table>
+
+1. Execute the deployment command. The example below deploys Elastic Runtime with Pivotal defaults and smoke tests:
+
+	<pre class="terminal">
+	$ bosh -n deploy cf-deployment.yml \
+		--deployment cf \
+		--vars-store cf-creds.yml
+		--var "system_domain=YOUR-SYSTEM-DOMAIN" \
+		--var "apps_domain=YOUR-APPS-DOMAIN" \
+		--var "cf_release_path=cf-246*.tgz" \
+		--var "cf_release_version=246.0.2" \
+		--ops-file pivotal-defaults.yml	 \
+		--ops-file errands/smoke-tests.yml
+	</pre>
+
