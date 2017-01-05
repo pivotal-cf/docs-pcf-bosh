@@ -30,6 +30,11 @@ The following table lists the available ops files and describes the functionalit
 <td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/pivotal-defaults.yml">Pivotal defaults</a></td>
 <td>This ops file customizes the Cloud Foundry deployment manifest with Elastic Runtime defaults for values such as the number of Diego cell instances or the default application security group.</td>
 <td>Required</td>
+</tr>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/errands/smoke-tests.yml">Smoke tests</a></td>
+<td>This ops file adds the smoke tests errand to your deployment. The smoke tests errand runs basic functionality tests against Elastic Runtime.</td>
+<td>Recommended</td>
+</tr>
 </table>
 
 ## <a id='deploy'></a>Step 3: Install Elastic Runtime
@@ -55,16 +60,20 @@ Perform the following steps to install Elastic Runtime:
 
 	To finish constructing your deployment command, specify your ops files with the `--ops-file` flag and provide the variables required by each ops file with the `--var` flag. 
 	<br><br>
-	Consult the following table for the variables required by different ops files.
+	Consult the following table for the `--var` variables required by different ops files.
 
 	<table>
 	<tr>
 	<th>Ops File
 	<th>Required Variables</th>
 	</tr>
+	<tr>
+	<td>Pivotal defaults</td>
+	<td>None</td>
 	</tr>
-	<td>TK</td>
-	<td>TK</td>
+	<tr>
+	<td>Smoke tests</td>
+	<td>None</td>
 	</tr>
 	</table>
 
