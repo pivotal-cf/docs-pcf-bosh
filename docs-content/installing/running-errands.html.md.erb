@@ -1,0 +1,68 @@
+---
+title: Running Errands
+owner: PCF BOSH
+---
+
+<strong><%= modified_date %></strong>
+
+This topic describes how to run errands on Elastic Runtime. You installed errands on your deployment by using ops files in the procedures described in the [Configuring and Installing Elastic Runtime](ert.html) topic.
+
+To perform the procedures in this topic, you must have completed the steps in [Preparing Your Environment](prepare-env.html), [Deploying the BOSH Director](deploy-director.html), [Applying the Cloud Config](cloud-config.html), [Uploading the Stemcell](upload-stemcell.html) and [Configuring and Installing Elastic Runtime](ert.html). 
+
+##<a id='understand-errands'></a> Understand Errands ##
+
+The following table provides information about the errands provided by the available [ops files](#ops-files):
+
+<table>
+<tr>
+<th>Errand</th>
+<th>Purpose</th>
+<th>Frequency</th>
+</tr>
+<tr>
+<td>Smoke tests</td>
+<td>The smoke tests errand runs basic functionality tests against Elastic Runtime.</td>
+<td><ul><li>Running the smoke test errand after each deploy is <strong>recommended</strong>.</li> <li>Running the smoke test errand regularly is <strong>optional</strong>.</li></td>
+</tr>
+</table>
+
+##<a id="view-errands"></a> View Errands ##
+
+To view the errands installed on your deployment, run the following command:
+
+<pre class="terminal">
+$ bosh errands -d cf
+
+Using environment 'director.ol-smokey.gcp.pcf-bosh.cf-app.com' as '?'
+
+Using deployment 'cf'
+
+Name
+autoscaling-destroy-broker
+autoscaling-register-broker
+deploy-autoscaling
+deploy-notifications
+deploy-notifications-ui
+mysql-bootstrap
+mysql-rejoin-unsafe
+push-apps-manager
+push-pivotal-account
+smoke-tests
+
+10 errands
+
+Succeeded
+</pre>
+
+<p class="note"><strong>Note</strong>: The specific output will look different depending on the errands you have installed.</p>
+
+##<a id='run-errand'></a> Run an Errand ##
+
+To run an errand, perform the following command:
+
+<pre class="terminal">$ bosh run errand ERRAND-NAME</pre>
+
+Use the following optional flags:
+
+* `--download-logs`
+* `--logs-dir DESTINATION-DIRECTORY`
