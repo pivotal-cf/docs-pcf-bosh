@@ -11,13 +11,11 @@ To perform the procedures in this topic, you must have completed the steps in [P
 
 <p class="note"><strong>Note</strong>: To automate deploying Elastic Runtime, see the <a href="../automating/pipeline.html#ert">Deploy Elastic Runtime</a> section of the <em>Building a Pipeline</em> topic.</p>
 
-## <a id='manifest'></a>Step 1: Download the Deployment Manifest ##
+## <a id='ops-files'></a>Step 1: Select Your Ops Files
 
-Visit the `cf-deployment` GitHub [repo](https://github.com/cloudfoundry/cf-deployment) to download the `0.0.0` version of the canonical Cloud Foundry deployment [manifest](https://github.com/cloudfoundry/cf-deployment/blob/master/cf-deployment.yml#0.0.0).
+Ops files specify operations to perform on the Cloud Foundry deployment [manifest](https://github.com/cloudfoundry/cf-deployment/blob/master/cf-deployment.yml#0.0.0) that you downloaded in the [Uploading the Stemcell](upload-stemcell.html) topic. 
 
-## <a id='ops-files'></a>Step 2: Select Your Ops Files
-
-Ops files specify operations to perform on the Cloud Foundry deployment manifest. You can use ops files to configure the manifest for Elastic Runtime by adding Pivotal defaults, [errands](https://bosh.io/docs/terminology.html#errand), and [releases](https://bosh.io/docs/terminology.html#release) to your deployment.
+You can use ops files to configure the manifest for Elastic Runtime by adding Pivotal defaults, [errands](https://bosh.io/docs/terminology.html#errand), and [releases](https://bosh.io/docs/terminology.html#release) to your deployment.
 
 The following table lists the available ops files and describes the functionality they add to your deployment. The table also specifies whether an ops file is required, recommended, or optional. Visit the `p-ert-bosh-experiment` GitHub [repo](https://github.com/pivotal-cf/p-ert-bosh-experiment) to view all available ops files. 
 
@@ -37,7 +35,7 @@ The following table lists the available ops files and describes the functionalit
 </tr>
 </table>
 
-## <a id='deploy'></a>Step 3: Install Elastic Runtime
+## <a id='deploy'></a>Step 2: Install Elastic Runtime
 
 To install Elastic Runtime, you use the BOSH CLI to deploy the Cloud Foundry deployment manifest and specify your ops files, variables file, and additional variables.
 

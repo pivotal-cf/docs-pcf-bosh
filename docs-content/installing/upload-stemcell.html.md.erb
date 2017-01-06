@@ -11,9 +11,20 @@ To perform the procedures in this topic, you must have completed the steps in [P
 
 <p class="note"><strong>Note</strong>: To automate uploading the stemcell, see the <a href="../automating/pipeline.html#upload">Upload the Stemcell and Cloud Config</a> section of the <em>Building a Pipeline</em> topic.</p>
 
-##<a id='discover'></a> Step 1: Discover Stemcells
+##<a id='determine'></a> Step 1: Determine Correct Stemcell Version
 
-Visit the stemcells [section](https://bosh.io/stemcells) of bosh.io to locate a stemcell for your IaaS.
+1. Visit the `cf-deployment` GitHub [repo](https://github.com/cloudfoundry/cf-deployment) to download the `0.0.0` version of the canonical Cloud Foundry deployment [manifest](https://github.com/cloudfoundry/cf-deployment/blob/master/cf-deployment.yml#0.0.0).
+
+1. In the final lines of the deployment manifest, locate the top-level property `stemcells` and retrieve the values for `os` and `version`. The following example specifies an Ubuntu Trusty 3312.12 stemcell.
+
+	```
+	stemcells:
+	- alias: default
+	  os: ubuntu-trusty
+	  version: '3312.12'
+	```
+
+1. Visit the stemcells [section](https://bosh.io/stemcells) of bosh.io to locate the stemcell specified by the deployment manifest for your IaaS. For the example manifest excerpted above, you would download the Ubuntu Trusty 3312.12 stemcell specific to your IaaS.
 
 ##<a id='upload'></a> Step 2: Upload Stemcell
 
