@@ -38,7 +38,20 @@ The following table provides information about the errands provided by the avail
 <td>Deploy Notifications UI</td>
 <td>The Deploy Notifications UI errand installs the Notifications UI release on your deployment.</td>
 <td><ul><li>Running the Deploy Notifications UI errand after each deploy is <strong>recommended</strong>.</li></ul></td>
-</tr>	
+</tr>
+<tr>
+<td>Deploy Autoscaling</td>
+<td>The Deploy Autoscaling errand installs the Autoscaling release on your deployment.</td>
+<td><ul><li>Running the Deploy Autoscaling errand after each deploy is <strong>recommended</strong>.</li></ul></td>
+</tr>
+<tr>
+<td>Autoscaling Register Broker</td>
+<td>The Autoscaling Register Broker errand registers the Autoscaler service on the <a href="https://docs.pivotal.io/pivotalcf/devguide/services/managing-services.html">marketplace</a>.</td>
+<td><ul><li>Running the Autoscaling Register Broker after each deploy is <strong>recommended</strong>.</li></ul></td>
+</tr>
+<td>Autoscaling Destroy Broker</td>
+<td>The Autoscaling Destroy Broker removes the Autoscaler service from the marketplace.</td>
+<td><ul><li>Only run the Autoscaling Destroy Broker if you want to remove the Autoscaler service from the marketplace.</li></ul></td> 
 </table>
 
 ##<a id="view-errands"></a> View Errands ##
