@@ -53,6 +53,21 @@ The following table lists the available ops files and describes the functionalit
 <td>This ops file adds the errand that deploys the Notifications UI release. The release deploys a dashboard for Elastic Runtime users to manage their notification subscriptions.</td>
 <td>Recommended</td>
 </tr>
+<tr>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/errands/deploy-autoscaling.yml">Deploy Autoscaling</a></td>
+<td>This ops file adds the errand that deploys the Autoscaling release. The release is a <a href="https://docs.pivotal.io/pivotalcf/devguide/services/managing-services.html">marketplace</a> service that enables developers to automatically scale applications on Elastic Runtime based on rules they specify. For more information, see the <a href="http://docs.pivotal.io/pivotalcf/appsman-services/autoscaler/using-autoscaler.html">Scaling an Application Using Autoscaler</a> topic.</td>
+<td>Recommended</td>
+</tr>
+<tr>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/errands/autoscaling-register-broker.yml">Autoscaling Register Broker</a></td>
+<td>This ops file adds the errand that deploys the service broker that registers the Autoscaler service on the marketplace. You must add this errand if you add the Deploy Autoscaling errand.</td>
+<td>Recommended</td>
+</tr>
+<tr>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/errands/autoscaling-destroy-broker.yml">Autoscaling Destroy Broker</a></td>
+<td> This ops file adds the errand that eliminates the Autoscaler service from the marketplace. You must add this errand if you add the Deploy Autoscaling errand.</td>
+<td>Recommended</td>
+</tr>
 </table>
 
 ## <a id='deploy'></a>Step 2: Install Elastic Runtime
