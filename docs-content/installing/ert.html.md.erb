@@ -33,6 +33,11 @@ The following table lists the available ops files and describes the functionalit
 <td>This ops file adds the smoke tests errand to your deployment. The smoke tests errand runs basic functionality tests against Elastic Runtime.</td>
 <td>Recommended</td>
 </tr>
+<tr>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/mysql-monitoring.yml">MySQL Monitoring release</a></td>
+<td>This ops file installs the MySQL Monitoring release. The release monitors your MySQL cluster to validate that replication is working across nodes and provides notifications over e-mail if it detects a replication failure. Install this release only if you are using MySQL in your deployment.</td>
+<td>Optional</td>
+</tr>
 </table>
 
 ## <a id='deploy'></a>Step 2: Install Elastic Runtime
@@ -42,6 +47,8 @@ To install Elastic Runtime, you use the BOSH CLI to deploy the Cloud Foundry dep
 Perform the following steps to install Elastic Runtime:
 
 1. [Download](https://github.com/cloudfoundry/cf-release/releases/tag/v246) the tarballed source code for Cloud Foundry version 246.
+1. [Download](https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/releases.yml) the `releases-yml` ops file. Edit this file to reflect only the releases you want to install.
+	<p class="note"><strong>Note</strong>: Installing a release requires both an ops file and a tarballed release. The tarballed releases are not currently available from an official distribution channel.</p>
 1. Ensure that you are logged in to your BOSH Director.
 1. Deploy Elastic Runtime. The following example includes all available ops files, along with their required variables. Your exact deploy command may be different depending on the functionality you want to add. Refer to the above [section](#ops-files) for more information.
 
