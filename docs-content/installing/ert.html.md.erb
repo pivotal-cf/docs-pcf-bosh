@@ -41,53 +41,52 @@ To install Elastic Runtime, you use the BOSH CLI to deploy the Cloud Foundry dep
 
 Perform the following steps to install Elastic Runtime:
 
-1. Create a blank YAML file called `cf-creds.yml`. This will serve as your variables store, where BOSH reads and writes the credentials for Cloud Foundry.
 1. [Download](https://github.com/cloudfoundry/cf-release/releases/tag/v246) the tarballed source code for Cloud Foundry version 246.
 1. Ensure that you are logged in to your BOSH Director.
-1. Construct your deployment command, starting with the following base:
-
-	```
-	bosh -n deploy cf-deployment.yml \
-	--deployment cf \
-	--vars-store cf-creds.yml
-	--var "system_domain=YOUR-SYSTEM-DOMAIN" \
-	--var "apps_domain=YOUR-APPS-DOMAIN" \
-	--var "cf_release_path=PATH-TO-TARBALLED-CF-SOURCE/cf-246*.tgz" \
-	--var "cf_release_version=246.0.2" \
-	```
-
-	To finish constructing your deployment command, specify your ops files with the `--ops-file` flag and provide the variables required by each ops file with the `--var` flag. 
-	<br><br>
-	Consult the following table for the `--var` variables required by different ops files.
-
-	<table>
-	<tr>
-	<th>Ops File
-	<th>Required Variables</th>
-	</tr>
-	<tr>
-	<td>Pivotal defaults</td>
-	<td>None</td>
-	</tr>
-	<tr>
-	<td>Smoke tests</td>
-	<td>None</td>
-	</tr>
-	</table>
-
-1. Execute the deployment command. The example below deploys Elastic Runtime with Pivotal defaults and smoke tests:
+1. Deploy Elastic Runtime. The following example includes all available ops files, along with their required variables. Your exact deploy command may be different depending on the functionality you want to add. Refer to the above [section](#ops-files) for more information.
 
 	<pre class="terminal">
-	$ bosh -n deploy cf-deployment.yml \
-		--deployment cf \
-		--vars-store cf-creds.yml
-		--var "system_domain=YOUR-SYSTEM-DOMAIN" \
-		--var "apps_domain=YOUR-APPS-DOMAIN" \
-		--var "cf_release_path=cf-246*.tgz" \
-		--var "cf_release_version=246.0.2" \
-		--ops-file pivotal-defaults.yml	 \
-		--ops-file errands/smoke-tests.yml
+	$ bosh -n deploy cf-deployment/cf-deployment.yml \
+	  --deployment cf \
+	  --ops-file releases.yml \
+	  --ops-file pivotal-defaults.yml \
+	  --ops-file mysql-proxy.yml \
+	  --ops-file mysql-monitoring.yml \
+	  --ops-file /errands/smoke-tests.yml \
+	  --ops-file /errands/push-apps-manager.yml \
+	  --ops-file /errands/deploy-notifications.yml \
+	  --ops-file /errands/deploy-notifications-ui.yml \
+	  --ops-file /errands/deploy-autoscaling.yml \
+	  --ops-file /errands/autoscaling-register-broker.yml \
+	  --ops-file /errands/autoscaling-destroy-broker.yml \
+	  --ops-file /errands/push-pivotal-account.yml \
+	  --ops-file /errands/mysql-recovery/bootstrap.yml \
+	  --ops-file /errands/mysql-recovery/rejoin-unsafe.yml \
+	  --var "system_domain=sys.example.com" \
+	  --var "apps_domain=apps.example.com" \
+	  --var "cf_release_path=cf-246*.tgz" \
+	  --var "cf_release_version=246.0.2" \
+	  --var "postgres_release_path=postgres*.tgz" \
+	  --var "postgres_release_version=8" \
+	  --var "notifications_release_path=notifications-31*.tgz" \
+	  --var "notifications_release_version=31" \
+	  --var "notifications_ui_release_path=notifications-ui*.tgz" \
+	  --var "notifications_ui_release_version=26" \
+	  --var "cf_autoscaling_release_path=cf-autoscaling*.tgz" \
+	  --var "cf_autoscaling_release_version=67" \
+	  --var "push_apps_manager_release_path=push-apps-manager*.tgz" \
+	  --var "push_apps_manager_release_version=659.7" \
+	  --var "mysql_monitoring_release_path=mysql-monitoring*.tgz" \
+	  --var "mysql_monitoring_release_version=6" \
+	  --var "mysql_backup_release_path=mysql-backup*.tgz" \
+	  --var "mysql_backup_release_version=1.28.0" \
+	  --var "pivotal_account_release_path=pivotal-account*.tgz" \
+	  --var "pivotal_account_release_version=1" \
+	  --var "service_backup_release_path=service-backup*.tgz" \
+	  --var "service_backup_release_version=17.2.0"
 	</pre>
+
+	<p class="note"><strong>Note</strong>: The first time you run the command, BOSH generates credentials and loads them into a variables store file called <code>cf-creds.yml</code>. The next time you run the command, you must pass in this file with the <code>--vars-store</code> flag.</p>
 
 After the deployment finishes, continue to the [Running Errands](running-errands.html)] topic.
 
