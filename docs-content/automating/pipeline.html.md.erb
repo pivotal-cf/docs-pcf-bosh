@@ -31,14 +31,13 @@ The first part of the pipeline prepares your environment for PCF BOSH.
 
 <%= image_tag('pipeline-prepare-env.png') %>
 
-This part of the pipeline contains the following jobs:
+This part of the pipeline contains the `terraform-up` job, which uses the Terraform Concourse Resource to prepare a Google Cloud Platform (GCP) environment for PCF. The job runs against the following resources:
 
-* `terraform-up` executes a set of Terraform scripts to prepare a Google Cloud Platform (GCP) environment for PCF. The job runs against the following resources:
+* `terraform` is the [Terraform Concourse Resource](https://github.com/ljfranklin/terraform-resource) that prepares the GCP environment.
+* `terraform-vars` is the Terraform variables file that contains information about the GCP environment such as the environment name, the region, and the service account key. In the reference pipeline, this file is retrieved from the PCF BOSH CI Google Cloud Storage (GCS) bucket.
+* `terraforming-gcp` is the set of Terraform templates that the Terraform Concourse Resource uses, loading variables from the `terraform-vars` file. These templates are retrieved from the PCF BOSH Terraforming GCP GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-terraforming-gcp).
 
-	* `terraform-vars` is the Terraform variables file that contains information about the GCP environment such as the environment name, the region, and the service account key. In the reference pipeline, this file is retrieved from the PCF BOSH CI Google Cloud Storage (GCS) bucket.
-	* `terraforming-gcp` is the set of Terraform scripts that the job runs, loading variables from the `terraform-vars` file. These scripts are retrieved from the PCF BOSH Terraforming GCP GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-terraforming-gcp).
-
-	<p class="note"><strong>Note</strong>: To prepare your environment with Terraform scripts manually, see the <a href="../installing/prepare-env.html">Preparing Your Environment</a> topic.</p>
+<p class="note"><strong>Note</strong>: To prepare your environment with Terraform manually, see the <a href="../installing/prepare-env.html">Preparing Your Environment</a> topic.</p>
 
 ##<a id='deploy-director'></a> Deploy the BOSH Director
 
