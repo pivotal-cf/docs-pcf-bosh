@@ -48,12 +48,10 @@ The second part of the pipeline deploys the BOSH Director, with user management 
 This part of the pipeline contains the `deploy-director` job. The job executes a shell [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/deploy-director.sh) that uses the BOSH CLI to deploy a BOSH Director with UAA and CredHub on the GCP environment. The script runs against the following resources:
 
 * `terraform-state` is the state file outputted by the `terraform-up` job that ran in the previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
-* `bosh-creds` is the file that contains the BOSH Director credentials, retrieved from the GCS bucket. The first time the pipeline runs, this file is blank. It must be seeded in the GCS bucket before the pipeline runs.
-* `bosh-vars` is the BOSH variables file, retrieved from the GCS bucket. This contains the variables needed to deploy [`bosh-deployment`](https://github.com/cloudfoundry/bosh-deployment), with one addition: `credhub_aes_key`, a 128-bit hex-encoded AES key required for CredHub.
+* `bosh-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the BOSH Director. The first time the pipeline runs, BOSH generates the credentials. The variables in the file include those needed to deploy [`bosh-deployment`](https://github.com/cloudfoundry/bosh-deployment), with one addition: `credhub_aes_key`, a 128-bit hex-encoded AES key required for CredHub.
 * `bosh-state` is the state file for your BOSH deployment. The first time the pipeline runs, this file is blank. It must be seeded in the GCS bucket before the pipeline runs. For more information about deployment state files, see the [BOSH documentation](https://bosh.io/docs/using-bosh-init.html#deployment-state).
 * `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/), which contains the [ops files](https://github.com/pivotal-cf/pcf-bosh-ci/tree/master/ops-files) that configure the BOSH deployment manifest for UAA and CredHub. Ops files specify operations to perform on the manifest.
 * `bosh-deployment` is the GitHub [repo](https://github.com/cloudfoundry/bosh-deployment) that contains the BOSH deployment manifest.
-* `credhub-release` is the tarballed CredHub BOSH release, retrieved from the GCS bucket.
 
 <p class="note"><strong>Note</strong>: To deploy the BOSH Director with UAA and CredHub manually, see the <a href="../installing/deploy-director.html">Deploying the BOSH Director</a> topic.</p>
 
@@ -90,11 +88,12 @@ The fourth part of the pipeline deploys Elastic Runtime.
 
 <%= image_tag('pipeline-ert.png') %>
 
-This part of the pipeline contains the `deploy-pcf` job, which executes two shell scripts. The [first](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/extract-closed-source-releases.sh) unzips a zip containing the closed-source releases required for Elastic Runtime. The [second](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/deploy-pcf.sh) uses the BOSH CLI to deploy Elastic Runtime. The scripts run against the following resources:
+This part of the pipeline contains the `deploy-ert` job, which executes two shell scripts. The [first](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/extract-closed-source-releases.sh) unzips a zip containing the closed-source releases required for Elastic Runtime. The [second](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/deploy-ert.sh) uses the BOSH CLI to deploy Elastic Runtime. The scripts run against the following resources:
 
-* `bosh-creds` is the file that contains the BOSH Director credentials outputted by the `deploy-director` job, retrieved from the GCS bucket. The shell script executes another [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/scripts/director-environment) that loads the credentials into the environment so that the BOSH CLI can deploy Elastic Runtime.
+* `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
+* `bosh-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the BOSH Director. The shell script executes another [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/scripts/director-environment) that loads the credentials into the environment so that the BOSH CLI can deploy Elastic Runtime.
 * `cf-deployment` is the `cf-deployment` GitHub [repo](https://github.com/cloudfoundry/cf-deployment) that contains the Cloud Foundry deployment manifest. The shell script uses the BOSH CLI to deploy Cloud Foundry with this manifest.
-* `cf-creds` is the file that contains the Cloud Foundry deployment credentials, retrieved from the GCS bucket. The first time the pipeline runs, this file is blank. It must be seeded in the GCS bucket before the pipeline runs. 
+* `cf-vars-store` is the file that contains the Cloud Foundry deployment credentials, retrieved from the GCS bucket. The first time the pipeline runs, this file is blank. It must be seeded in the GCS bucket before the pipeline runs. 
 * `p-ert` is the `p-ert-bosh-experiment` GitHub [repo](https://github.com/pivotal-cf/p-ert-bosh-experiment) that contains the ops files that configure the Cloud Foundry deployment manifest for Elastic Runtime.
 * `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the `deploy-pcf` job. 
 * `closed-source-releases-zip` is a zip containing the closed-source releases required for Elastic Runtime, retrieved from the GCS bucket. 
