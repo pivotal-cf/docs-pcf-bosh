@@ -21,27 +21,68 @@ This topic discusses the following components:
 
 * **CredHub** is a [BOSH release](https://bosh.io/docs/release.html) that integrates with the BOSH Director to handle credential generation and management. For more information about CredHub, see its GitHub [repo](https://github.com/pivotal-cf/credhub-release).
 
-##<a id='download-cli'></a> Download the BOSH CLI
+##<a id='download-cli'></a> Step 1: Download the BOSH CLI
 
 The procedures in this topic and the rest of the <em>Installing and Configuring</em> topics require the BOSH CLI v2. See the [BOSH documentation](https://bosh.io/docs/cli-v2.html#install) for instructions on how to install the most recent BOSH CLI v2.
 
-##<a id='deploy'></a> Deploy
+##<a id='deploy'></a> Step 2: Deploy
 
-You can deploy the BOSH Director with UAA and CredHub in one step. 
+Perform the following steps to deploy the BOSH Director with UAA:
 
-See the `bosh-deployment` GitHub [repo](https://github.com/cloudfoundry/bosh-deployment) to deploy the BOSH Director with UAA.
+1. Clone the BOSH deployment manifest from the `bosh-deployment` GitHub [repo](https://github.com/cloudfoundry/bosh-deployment):
+
+	<pre class="terminal">$ git clone https://github.com/cloudfoundry/bosh-deployment ~/workspace/bosh-deployment</pre>
+
+1. Create a directory for your BOSH Director deployment:
+
+	<pre class="terminal">$ mkdir -p ~/deployments/bosh-1</pre>
+
+1. Deploy the BOSH Director. The specific command will vary depending on your IaaS. The following example deploys a BOSH Director on Amazon Web Services (AWS):
+
+	<pre class="terminal">
+	$ bosh create-env ~/workspace/bosh-deployment/bosh.yml \
+		--state ./state.json \
+		-o ~/workspace/bosh-deployment/aws/cpi.yml \
+		--vars-store ./creds.yml \
+		-v access_key_id=... \
+		-v secret_access_key=... \
+		-v region=us-east-1 \
+		-v az=us-east-1b \
+		-v default_key_name=bosh \
+		-v default_security_groups=[bosh] \
+		-v subnet_id=subnet-... \
+		-v director_name=bosh-1 \
+		-v internal_cidr=10.0.0.0/24 \
+		-v internal_gw=10.0.0.1 \
+		-v internal_ip=10.0.0.6 \
+		--var-file private_key=~/Downloads/bosh.pem
+	</pre>
+
+##<a id='alias'></a> Step 3: Alias Your BOSH Director
+
+The `bosh create-env` command generates a number of variables referenced by the BOSH deployment manifest and stores them in the variables store file. One of the generated variables is the CA certificate that the deployed BOSH Director uses for TLS. 
+
+To alias your BOSH Director, use `bosh interpolate` to extract the CA certificate from the variables store and pass it to `bosh alias-env`:
+
+<pre class="terminal">$ bosh alias-env bosh-1 -e 10.0.0.6 \
+	--ca-cert <(bosh interpolate ./creds.yml --path /director_ssl/ca)
+</pre>
+
+After aliasing your BOSH Director, the BOSH CLI associates that alias with an endpoint and a CA certificate. In the future, you can refer to your BOSH Director by its alias with the `-e` flag.
+
+##<a id='credhub'></a> Step 4: Configure CredHub
 
 See the CredHub GitHub [repo](https://github.com/pivotal-cf/credhub-release/wiki/CredHub-Integration-with-BOSH-Director-Configuration-Guide) for a guide that describes how to integrate CredHub with the BOSH Director. The CredHub GitHub repo is not currently public, so you may need to request access from Pivotal.
 
-##<a id='login'></a> Log In
+##<a id='login'></a> Step 5: Log In
 
-After deploying the BOSH Director, ensure that you can target and log in to your BOSH Director:
+Ensure that you can log in to your BOSH Director.
 
-<pre class="terminal">
-$ bosh --ca-cert /var/tempest/workspaces/default/root_ca_certificate target BOSH-DIRECTOR-IP
-Target set to 'DIRECTOR-UUID'
+Use the credentials in your variables store, specifying your alias with the `-e` flag:
+
+<pre class="terminal">$ bosh log-in -e bosh-1
 Your username: director
-Enter password: DIRECTOR-CREDENTIAL
+Enter password: 
 Logged in as 'director'
 </pre>
 
