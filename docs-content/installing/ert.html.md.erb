@@ -80,15 +80,23 @@ Perform the following steps to install Elastic Runtime:
 	<pre class="terminal">
 	$ mkdir ~/pcf
 	</pre>
-1. Clone the `1.9` branch of the `p-ert-bosh-experiment` GitHub [repo](https://github.com/pivotal-cf/p-ert-bosh-experiment/tree/1.9) into a new directory called `p-ert` in `pcf`:
+1. Clone the `p-ert-bosh-experiment` GitHub [repo](https://github.com/pivotal-cf/p-ert-bosh-experiment/tree/1.9) into a new directory called `p-ert` in `pcf`:
 	<pre class="terminal">
 	$ git clone http<span>s:</span>//github.com/pivotal-cf/p-ert-bosh-experiment.git ~/pcf/
+	</pre>
+1. Change into the `p-ert` directory and change to the `1.9` branch:
+	<pre class="terminal">
+	$ cd ~/pcf/p-ert && git checkout 1.9
 	</pre>
 1. [Download](https://github.com/cloudfoundry/cf-release/releases/tag/v246) the tarballed source code for Cloud Foundry version 246. Unzip it into the `cf-deployment` directory of `pcf`.
 1. [Download](https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/releases.yml) the `releases-yml` ops file into the `p-ert` directory of `pcf`. Edit this file to reflect only the releases you want to install.
 1. Download any required tarballed releases into the `closed-source-releases` directory of `pcf`.
 	<p class="note"><strong>Note</strong>: Installing a release requires both an ops file and a tarballed release. The tarballed releases are not currently available from an official distribution channel.</p>
-1. Ensure that you are logged in to your BOSH Director and that you are in your `pcf` directory.
+1. Change into the `pcf` directory:
+	<pre class="terminal">
+	$ cd ~/pcf
+	</pre>
+1. Ensure that you are logged in to your BOSH Director.
 1. Deploy Elastic Runtime. The following example includes all available ops files, along with their required variables. Your exact deploy command may be different depending on the functionality you want to add. Refer to the above [section](#ops-files) for more information.
 
 	<pre class="terminal">
