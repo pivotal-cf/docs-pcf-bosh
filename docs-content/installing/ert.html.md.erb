@@ -17,7 +17,7 @@ Ops files specify operations to perform on the Cloud Foundry deployment [manifes
 
 You can use ops files to configure the manifest for Elastic Runtime by adding Pivotal defaults, [errands](https://bosh.io/docs/terminology.html#errand), and [releases](https://bosh.io/docs/terminology.html#release) to your deployment.
 
-The following table lists the available ops files and describes the functionality they add to your deployment. The table also specifies whether an ops file is required, recommended, or optional. Visit the `p-ert-bosh-experiment` GitHub [repo](https://github.com/pivotal-cf/p-ert-bosh-experiment) to view all available ops files. 
+The following table lists the available ops files and describes the functionality they add to your deployment. The table also specifies whether an ops file is required, recommended, or optional. Visit the `1.9` branch of the `p-ert-bosh-experiment` GitHub [repo](https://github.com/pivotal-cf/p-ert-bosh-experiment/tree/1.9) to view all available ops files. 
 
 <table>
 <tr>
@@ -25,46 +25,46 @@ The following table lists the available ops files and describes the functionalit
 <th>Purpose</th>
 <th>Status</th>
 </tr>
-<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/pivotal-defaults.yml">Pivotal defaults</a></td>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/pivotal-defaults.yml">Pivotal defaults</a></td>
 <td>This ops file customizes the Cloud Foundry deployment manifest with Elastic Runtime defaults for values such as the number of Diego cell instances or the default application security group.</td>
 <td>Required</td>
 </tr>
-<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/errands/smoke-tests.yml">Smoke tests</a></td>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/smoke-tests.yml">Smoke tests</a></td>
 <td>This ops file adds the smoke tests errand to your deployment. The smoke tests errand runs basic functionality tests against Elastic Runtime.</td>
 <td>Recommended</td>
 </tr>
 <tr>
-<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/mysql-monitoring.yml">MySQL Monitoring release</a></td>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/mysql-monitoring.yml">MySQL Monitoring release</a></td>
 <td>This ops file installs the MySQL Monitoring release. The release monitors your MySQL cluster to validate that replication is working across nodes and provides notifications over e-mail if it detects a replication failure. Install this release only if you are using MySQL in your deployment.</td>
 <td>Optional</td>
 </tr>
 <tr>
-<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/errands/push-apps-manager.yml">Push Apps Manager</a></td>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/push-apps-manager.yml">Push Apps Manager</a></td>
 <td>This ops file adds the errand that pushes Apps Manager to your deployment. Apps Manager is a web-based tool to help manage organizations, spaces, applications, services, and users in Elastic Runtime. See the Apps Manager <a href="https://docs.pivotal.io/pivotalcf/console/index.html">documentation</a> for more information.</td>
 <td>Optional</td>
 </tr>
 <tr>
-<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/errands/deploy-notifications.yml">Deploy Notifications</a></td>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/deploy-notifications.yml">Deploy Notifications</a></td>
 <td>This ops file adds the errand that deploys the Notifications release. The release deploys an API for sending email notifications to Elastic Runtime users. For more information, see the <a href="http://docs.pivotal.io/pivotalcf/adminguide/notifications.html">Getting Started with the Notifications Service</a> topic.</td>
 <td>Recommended</td>
 </tr>
 <tr>
-<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/errands/deploy-notifications-ui.yml">Deploy Notifications UI</a></td>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/deploy-notifications-ui.yml">Deploy Notifications UI</a></td>
 <td>This ops file adds the errand that deploys the Notifications UI release. The release deploys a dashboard for Elastic Runtime users to manage their notification subscriptions.</td>
 <td>Recommended</td>
 </tr>
 <tr>
-<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/errands/deploy-autoscaling.yml">Deploy Autoscaling</a></td>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/deploy-autoscaling.yml">Deploy Autoscaling</a></td>
 <td>This ops file adds the errand that deploys the Autoscaling release. The release is a <a href="https://docs.pivotal.io/pivotalcf/devguide/services/managing-services.html">marketplace</a> service that enables developers to automatically scale applications on Elastic Runtime based on rules they specify. For more information, see the <a href="http://docs.pivotal.io/pivotalcf/appsman-services/autoscaler/using-autoscaler.html">Scaling an Application Using Autoscaler</a> topic.</td>
 <td>Recommended</td>
 </tr>
 <tr>
-<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/errands/autoscaling-register-broker.yml">Autoscaling Register Broker</a></td>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/autoscaling-register-broker.yml">Autoscaling Register Broker</a></td>
 <td>This ops file adds the errand that deploys the service broker that registers the Autoscaler service on the marketplace. You must add this errand if you add the Deploy Autoscaling errand.</td>
 <td>Recommended</td>
 </tr>
 <tr>
-<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/errands/autoscaling-destroy-broker.yml">Autoscaling Destroy Broker</a></td>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/autoscaling-destroy-broker.yml">Autoscaling Destroy Broker</a></td>
 <td> This ops file adds the errand that removes the Autoscaler service from the marketplace. You must add this errand if you add the Deploy Autoscaling errand.</td>
 <td>Recommended</td>
 </tr>
@@ -76,54 +76,64 @@ To install Elastic Runtime, you use the BOSH CLI to deploy the Cloud Foundry dep
 
 Perform the following steps to install Elastic Runtime:
 
-1. [Download](https://github.com/cloudfoundry/cf-release/releases/tag/v246) the tarballed source code for Cloud Foundry version 246.
-1. [Download](https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/releases.yml) the `releases-yml` ops file. Edit this file to reflect only the releases you want to install.
+1. Create a new directory called `pcf` in your home directory:
+	<pre class="terminal">
+	$ mkdir ~/pcf
+	</pre>
+1. Clone the `1.9` branch of the `p-ert-bosh-experiment` GitHub [repo](https://github.com/pivotal-cf/p-ert-bosh-experiment/tree/1.9) into a new directory called `p-ert` in `pcf`:
+	<pre class="terminal">
+	$ git clone http<span>s:</span>//github.com/pivotal-cf/p-ert-bosh-experiment.git ~/pcf/
+	</pre>
+1. [Download](https://github.com/cloudfoundry/cf-release/releases/tag/v246) the tarballed source code for Cloud Foundry version 246. Unzip it into the `cf-deployment` directory of `pcf`.
+1. [Download](https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/releases.yml) the `releases-yml` ops file into the `p-ert` directory of `pcf`. Edit this file to reflect only the releases you want to install.
+1. Download any required tarballed releases into the `closed-source-releases` directory of `pcf`.
 	<p class="note"><strong>Note</strong>: Installing a release requires both an ops file and a tarballed release. The tarballed releases are not currently available from an official distribution channel.</p>
-1. Ensure that you are logged in to your BOSH Director.
+1. Ensure that you are logged in to your BOSH Director and that you are in your `pcf` directory.
 1. Deploy Elastic Runtime. The following example includes all available ops files, along with their required variables. Your exact deploy command may be different depending on the functionality you want to add. Refer to the above [section](#ops-files) for more information.
 
 	<pre class="terminal">
 	$ bosh -n deploy cf-deployment/cf-deployment.yml \
 	  --deployment cf \
-	  --ops-file releases.yml \
-	  --ops-file pivotal-defaults.yml \
-	  --ops-file mysql-proxy.yml \
-	  --ops-file mysql-monitoring.yml \
-	  --ops-file /errands/smoke-tests.yml \
-	  --ops-file /errands/push-apps-manager.yml \
-	  --ops-file /errands/deploy-notifications.yml \
-	  --ops-file /errands/deploy-notifications-ui.yml \
-	  --ops-file /errands/deploy-autoscaling.yml \
-	  --ops-file /errands/autoscaling-register-broker.yml \
-	  --ops-file /errands/autoscaling-destroy-broker.yml \
-	  --ops-file /errands/push-pivotal-account.yml \
-	  --ops-file /errands/mysql-recovery/bootstrap.yml \
-	  --ops-file /errands/mysql-recovery/rejoin-unsafe.yml \
+	  --ops-file p-ert/releases.yml \
+	  --ops-file p-ert/pivotal-defaults.yml \
+	  --ops-file p-ert/mysql-proxy.yml \
+	  --ops-file p-ert/mysql-monitoring.yml \
+	  --ops-file p-ert/errands/smoke-tests.yml \
+	  --ops-file p-ert/errands/push-apps-manager.yml \
+	  --ops-file p-ert/errands/deploy-notifications.yml \
+	  --ops-file p-ert/errands/deploy-notifications-ui.yml \
+	  --ops-file p-ert/errands/deploy-autoscaling.yml \
+	  --ops-file p-ert/errands/autoscaling-register-broker.yml \
+	  --ops-file p-ert/errands/autoscaling-destroy-broker.yml \
+	  --ops-file p-ert/errands/push-pivotal-account.yml \
+	  --ops-file p-ert/errands/mysql-recovery/bootstrap.yml \
+	  --ops-file p-ert/errands/mysql-recovery/rejoin-unsafe.yml \
+	  --vars-store cf-vars.yml \
 	  --var "system_domain=sys.example.com" \
 	  --var "apps_domain=apps.example.com" \
-	  --var "cf_release_path=cf-246*.tgz" \
+	  --var "cf_release_path=file://$(ls "$PWD"/closed-source-releases/cf-246*.tgz)" \
 	  --var "cf_release_version=246.0.2" \
-	  --var "postgres_release_path=postgres*.tgz" \
+	  --var "postgres_release_path=file://$(ls "$PWD"/closed-source-releases/postgres*.tgz)" \
 	  --var "postgres_release_version=8" \
-	  --var "notifications_release_path=notifications-31*.tgz" \
+	  --var "notifications_release_path=file://$(ls "$PWD"/closed-source-releases/notifications-31*.tgz)" \
 	  --var "notifications_release_version=31" \
-	  --var "notifications_ui_release_path=notifications-ui*.tgz" \
+	  --var "notifications_ui_release_path=file://$(ls "$PWD"/closed-source-releases/notifications-ui*.tgz)" \
 	  --var "notifications_ui_release_version=26" \
-	  --var "cf_autoscaling_release_path=cf-autoscaling*.tgz" \
+	  --var "cf_autoscaling_release_path=file://$(ls "$PWD"/closed-source-releases/cf-autoscaling*.tgz)" \
 	  --var "cf_autoscaling_release_version=67" \
-	  --var "push_apps_manager_release_path=push-apps-manager*.tgz" \
+	  --var "push_apps_manager_release_path=file://$(ls "$PWD"/closed-source-releases/push-apps-manager*.tgz)" \
 	  --var "push_apps_manager_release_version=659.7" \
-	  --var "mysql_monitoring_release_path=mysql-monitoring*.tgz" \
+	  --var "mysql_monitoring_release_path=file://$(ls "$PWD"/closed-source-releases/mysql-monitoring*.tgz)" \
 	  --var "mysql_monitoring_release_version=6" \
-	  --var "mysql_backup_release_path=mysql-backup*.tgz" \
+	  --var "mysql_backup_release_path=file://$(ls "$PWD"/closed-source-releases/mysql-backup*.tgz)" \
 	  --var "mysql_backup_release_version=1.28.0" \
-	  --var "pivotal_account_release_path=pivotal-account*.tgz" \
+	  --var "pivotal_account_release_path=file://$(ls "$PWD"/closed-source-releases/pivotal-account*.tgz)" \
 	  --var "pivotal_account_release_version=1" \
-	  --var "service_backup_release_path=service-backup*.tgz" \
+	  --var "service_backup_release_path=file://$(ls "$PWD"/closed-source-releases/service-backup*.tgz)" \
 	  --var "service_backup_release_version=17.2.0"
 	</pre>
 
-	<p class="note"><strong>Note</strong>: The first time you run the command, BOSH generates credentials and loads them into a variables store file called <code>cf-creds.yml</code>. The next time you run the command, you must pass in this file with the <code>--vars-store</code> flag.</p>
+	<p class="note"><strong>Note</strong>: The first time you run the command, BOSH generates credentials and loads them into a variables store file called <code>cf-creds.yml</code>.</p>
 
 After the deployment finishes, continue to the [Running Errands](running-errands.html) topic.
 
