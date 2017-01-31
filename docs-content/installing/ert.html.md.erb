@@ -123,10 +123,9 @@ Perform the following steps to install Elastic Runtime:
 	$ cd ~/pcf
 	</pre>
 1. Ensure that you are logged in to your BOSH Director.
-1. Deploy Elastic Runtime. The following example includes all available ops files, along with their required variables. Your exact deploy command may be different depending on the functionality you want to add. Refer to the above [section](#ops-files) for more information.
-
+1. Generate your base deployment manifest with `bosh interpolate`. The following example includes all available ops files, along with their required variables. Your exact command may be different depending on the functionality you want to add. Refer to the above [section](#ops-files) for more information.
 	<pre class="terminal">
-	$ bosh -n deploy cf-deployment/cf-deployment.yml \
+	$ bosh interpolate -d cf cf-deployment/cf-deployment.yml \
 	  --deployment cf \
 	  --ops-file p-ert/pivotal-defaults.yml \
 	  --ops-file p-ert/ip-overrides.yml \
@@ -142,30 +141,46 @@ Perform the following steps to install Elastic Runtime:
 	  --ops-file p-ert/errands/push-pivotal-account.yml \
 	  --ops-file p-ert/errands/mysql-recovery/bootstrap.yml \
 	  --ops-file p-ert/errands/mysql-recovery/rejoin-unsafe.yml \
-	  --vars-store cf-vars.yml \
-	  --var "system_domain=sys.example.com" \
-	  --var "apps_domain=apps.example.com" \
-	  --var "smtp_host_name=smtp.example.com" \
-	  --var "smtp_host_port=25" \
-	  --var "smtp_sender_username=user@example.com" \
-	  --var "smtp_sender_password=password" \
-	  --var "cf_release_path=file://$(ls "$PWD"/closed-source-releases/cf-246*.tgz)" \
-	  --var "cf_release_version=246.0.2" \
-	  --var "notifications_release_path=file://$(ls "$PWD"/closed-source-releases/notifications-31*.tgz)" \
-	  --var "notifications_release_version=31" \
-	  --var "notifications_ui_release_path=file://$(ls "$PWD"/closed-source-releases/notifications-ui*.tgz)" \
-	  --var "notifications_ui_release_version=26" \
-	  --var "cf_autoscaling_release_path=file://$(ls "$PWD"/closed-source-releases/cf-autoscaling*.tgz)" \
-	  --var "cf_autoscaling_release_version=67" \
-	  --var "push_apps_manager_release_path=file://$(ls "$PWD"/closed-source-releases/push-apps-manager*.tgz)" \
-	  --var "push_apps_manager_release_version=659.7" \
-	  --var "mysql_monitoring_release_path=file://$(ls "$PWD"/closed-source-releases/mysql-monitoring*.tgz)" \
-	  --var "mysql_monitoring_release_version=6" \
-	  --var "pivotal_account_release_path=file://$(ls "$PWD"/closed-source-releases/pivotal-account*.tgz)" \
-	  --var "pivotal_account_release_version=1" \
+ 	  --var-errs-unused
+	  --var "system\_domain=sys.example.com" \
+	  --var "apps\_domain=apps.example.com" \
+	  --var "smtp\_host\_name=smtp.example.com" \
+	  --var "smtp\_host\_port=25" \
+	  --var "smtp\_sender\_username=user<span>@</span>example.com" \
+	  --var "smtp\_sender\_password=password" \
+	  --var "cf\_release\_path=file://$(ls "$PWD"/closed-source-releases/cf-246&ast;.tgz)" \
+	  --var "cf\_release\_version=246.0.2" \
+	  --var "notifications\_release\_path=file://$(ls "$PWD"/closed-source-releases/notifications-31&ast;.tgz)" \
+	  --var "notifications\_release\_version=31" \
+	  --var "notifications\_ui\_release\_path=file://$(ls "$PWD"/closed-source-releases/notifications-ui&ast;.tgz)" \
+	  --var "notifications\_ui\_release\_version=26" \
+	  --var "cf\_autoscaling\_release\_path=file://$(ls "$PWD"/closed-source-releases/cf-autoscaling&ast;.tgz)" \
+	  --var "cf\_autoscaling\_release\_version=67" \
+	  --var "push\_apps\_manager\_release\_path=file://$(ls "$PWD"/closed-source-releases/push-apps-manager&ast;.tgz)" \
+	  --var "push_apps\_manager\_release\_version=659.7" \
+	  --var "mysql\_monitoring\_release\_path=file://$(ls "$PWD"/closed-source-releases/mysql-monitoring&ast;.tgz)" \
+	  --var "mysql\_monitoring\_release\_version=6" \
+	  --var "pivotal\_account\_release\_path=file://$(ls "$PWD"/closed-source-releases/pivotal-account&ast;.tgz)" \
+	  --var "pivotal\_account\_release\_version=1" \
+	  &gt; cf-base.yml
 	</pre>
 
-	<p class="note"><strong>Note</strong>: The first time you run the command, BOSH generates credentials and loads them into a variables store file called <code>cf-creds.yml</code>.</p>
+	The example command above includes the flag <code>--var-errs-unused</code>, which causes the command to fail if you provide a value for a variable that is not used in the manifest.
+
+1. Modify the base manifest `cf-base.yml` as needed and save the final manifest as `cf.yml`.
+1. Deploy Elastic Runtime. 
+
+	<pre class="terminal">
+	$ bosh deploy -d cf cf.yml \
+	  --vars-store cf-vars.yml \
+	  --var-errs-unused \
+	  --var-errs
+	</pre>
+
+	The example command above includes the following flags:
+	* <code>--vars-store</code>, which specifies a variables store file. The first time you run the command, BOSH generates credentials and loads them into the file <code>cf-vars.yml</code>.
+	* <code>--var-errs-unused</code>, which is also included in the `bosh interpolate` command above.
+	* <code>--var-errs</code>, which causes the command to fail if there is a variable required in the manifest that you haven't provided.
 
 After the deployment finishes, continue to the [Running Errands](running-errands.html) topic.
 
