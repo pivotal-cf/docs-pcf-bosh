@@ -126,7 +126,6 @@ Perform the following steps to install Elastic Runtime:
 1. Generate your base deployment manifest with `bosh interpolate`. The following example includes all available ops files, along with their required variables. Your exact command may be different depending on the functionality you want to add. Refer to the above [section](#ops-files) for more information.
 	<pre class="terminal">
 	$ bosh interpolate -d cf cf-deployment/cf-deployment.yml \
-	  --deployment cf \
 	  --ops-file p-ert/pivotal-defaults.yml \
 	  --ops-file p-ert/ip-overrides.yml \
 	  --ops-file p-ert/mysql-proxy.yml \
