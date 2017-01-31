@@ -25,18 +25,30 @@ The following table lists the available ops files and describes the functionalit
 <th>Purpose</th>
 <th>Status</th>
 </tr>
-<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/pivotal-defaults.yml">Pivotal defaults</a></td>
+<tr>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/pivotal-defaults.yml">Pivotal Defaults</a></td>
 <td>This ops file customizes the Cloud Foundry deployment manifest with Elastic Runtime defaults for values such as the number of Diego cell instances or the default application security group.</td>
 <td>Required</td>
 </tr>
-<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/smoke-tests.yml">Smoke tests</a></td>
-<td>This ops file adds the smoke tests errand to your deployment. The smoke tests errand runs basic functionality tests against Elastic Runtime.</td>
-<td>Recommended</td>
+<tr>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/ip-overrides.yml">IP Overrides</a></td>
+<td>This ops file customizes the Cloud Foundry deployment manifest to replace the IP address values for various components with the static IP addresses for Consul, NATS, and MySQL.</td>
+<td>Required</td>
 </tr>
 <tr>
-<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/mysql-monitoring.yml">MySQL Monitoring release</a></td>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/mysql-proxy.yml">MySQL Proxy</a></td>
+<td>This ops file configures the MySQL proxy, which proxies TCP connections to healthy MariaDB nodes and provides a dashboard where operators can observe health and metrics for each instance in the proxy tier. Use this ops file only if you are using MySQL in your deployment.</td>
+<td>Optional</td>
+</tr>
+<tr>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/mysql-monitoring.yml">MySQL Monitoring Release</a></td>
 <td>This ops file installs the MySQL Monitoring release. The release monitors your MySQL cluster to validate that replication is working across nodes and provides notifications over e-mail if it detects a replication failure. Install this release only if you are using MySQL in your deployment.</td>
 <td>Optional</td>
+</tr>
+<tr>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/smoke-tests.yml">Smoke Tests</a></td>
+<td>This ops file adds the smoke tests errand to your deployment. The smoke tests errand runs basic functionality tests against Elastic Runtime.</td>
+<td>Recommended</td>
 </tr>
 <tr>
 <td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/push-apps-manager.yml">Push Apps Manager</a></td>
@@ -67,6 +79,21 @@ The following table lists the available ops files and describes the functionalit
 <td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/autoscaling-destroy-broker.yml">Autoscaling Destroy Broker</a></td>
 <td> This ops file adds the errand that removes the Autoscaler service from the marketplace. You must add this errand if you add the Deploy Autoscaling errand.</td>
 <td>Recommended</td>
+</tr>
+<tr>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/push-pivotal-account.yml">Push Pivotal Account</a></td>
+<td> This ops file adds the errand that deploys the Pivotal Account release. Pivotal Account is a web-based user management tool that allows users to create and manage their accounts in Elastic Runtime. See the <a href="https://docs.pivotal.io/pivotalcf/opsguide/pivotal-account.html">Enabling Pivotal Account</a> topic for more information.</td>
+<td>Optional</td>
+</tr>
+<tr>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/errands/mysql-recovery/bootstrap.yml">MySQL Recovery Bootstrap</a></td>
+<td> This ops file adds the errand that restarts a MySQL Galera cluster, which is required when the cluster has lost quorum. Use this ops file only if you are using MySQL in your deployment.</td>
+<td>Optional</td>
+</tr>
+<tr>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/errands/mysql-recovery/rejoin-unsafe.yml">MySQL Rejoin Unsafe</a></td>
+<td> This ops file adds the errand that forces a node to rejoin a cluster. Use this ops file only if you are using MySQL in your deployment.</td>
+<td>Optional</td>
 </tr>
 </table>
 
@@ -102,6 +129,7 @@ Perform the following steps to install Elastic Runtime:
 	$ bosh -n deploy cf-deployment/cf-deployment.yml \
 	  --deployment cf \
 	  --ops-file p-ert/pivotal-defaults.yml \
+	  --ops-file p-ert/ip-overrides.yml \
 	  --ops-file p-ert/mysql-proxy.yml \
 	  --ops-file p-ert/mysql-monitoring.yml \
 	  --ops-file p-ert/errands/smoke-tests.yml \
@@ -117,10 +145,12 @@ Perform the following steps to install Elastic Runtime:
 	  --vars-store cf-vars.yml \
 	  --var "system_domain=sys.example.com" \
 	  --var "apps_domain=apps.example.com" \
+	  --var "smtp_host_name=smtp.example.com" \
+	  --var "smtp_host_port=25" \
+	  --var "smtp_sender_username=user@example.com" \
+	  --var "smtp_sender_password=password" \
 	  --var "cf_release_path=file://$(ls "$PWD"/closed-source-releases/cf-246*.tgz)" \
 	  --var "cf_release_version=246.0.2" \
-	  --var "postgres_release_path=file://$(ls "$PWD"/closed-source-releases/postgres*.tgz)" \
-	  --var "postgres_release_version=8" \
 	  --var "notifications_release_path=file://$(ls "$PWD"/closed-source-releases/notifications-31*.tgz)" \
 	  --var "notifications_release_version=31" \
 	  --var "notifications_ui_release_path=file://$(ls "$PWD"/closed-source-releases/notifications-ui*.tgz)" \
@@ -131,12 +161,8 @@ Perform the following steps to install Elastic Runtime:
 	  --var "push_apps_manager_release_version=659.7" \
 	  --var "mysql_monitoring_release_path=file://$(ls "$PWD"/closed-source-releases/mysql-monitoring*.tgz)" \
 	  --var "mysql_monitoring_release_version=6" \
-	  --var "mysql_backup_release_path=file://$(ls "$PWD"/closed-source-releases/mysql-backup*.tgz)" \
-	  --var "mysql_backup_release_version=1.28.0" \
 	  --var "pivotal_account_release_path=file://$(ls "$PWD"/closed-source-releases/pivotal-account*.tgz)" \
 	  --var "pivotal_account_release_version=1" \
-	  --var "service_backup_release_path=file://$(ls "$PWD"/closed-source-releases/service-backup*.tgz)" \
-	  --var "service_backup_release_version=17.2.0"
 	</pre>
 
 	<p class="note"><strong>Note</strong>: The first time you run the command, BOSH generates credentials and loads them into a variables store file called <code>cf-creds.yml</code>.</p>
