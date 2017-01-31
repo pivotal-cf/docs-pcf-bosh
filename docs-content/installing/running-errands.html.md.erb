@@ -20,7 +20,7 @@ The following table provides information about the errands provided by the avail
 <th>Frequency</th>
 </tr>
 <tr>
-<td>Smoke tests</td>
+<td>Smoke Tests</td>
 <td>The smoke tests errand runs basic functionality tests against Elastic Runtime.</td>
 <td><ul><li>Running the smoke test errand after each deploy is <strong>recommended</strong>.</li> <li>Running the smoke test errand regularly is <strong>optional</strong>.</li></td>
 </tr>
@@ -49,9 +49,26 @@ The following table provides information about the errands provided by the avail
 <td>The Autoscaling Register Broker errand registers the Autoscaler service on the <a href="https://docs.pivotal.io/pivotalcf/devguide/services/managing-services.html">marketplace</a>.</td>
 <td><ul><li>Running the Autoscaling Register Broker after each deploy is <strong>recommended</strong>.</li></ul></td>
 </tr>
+<tr>
 <td>Autoscaling Destroy Broker</td>
-<td>The Autoscaling Destroy Broker removes the Autoscaler service from the marketplace.</td>
+<td>The Autoscaling Destroy Broker errand removes the Autoscaler service from the marketplace.</td>
 <td><ul><li>Only run the Autoscaling Destroy Broker if you want to remove the Autoscaler service from the marketplace.</li></ul></td> 
+</tr>
+<tr>
+<td>Push Pivotal Account</td>
+<td>The Push Pivotal Account errand installs <a href="https://docs.pivotal.io/pivotalcf/opsguide/pivotal-account.html">Pivotal Account</a> on your deployment.</td>
+<td><ul><li>Running the Push Pivotal Account errand after each deploy is <strong>recommended</strong>.</li></ul></td> 
+</tr>
+<tr>
+<td>MySQL Recovery Bootstrap</td>
+<td>The MySQL Recovery Bootstrap errand restarts a MySQL Galera cluster.</td>
+<td><ul><li>Only run the MySQL Recovery Bootstrap errand if a cluster has lost quorum.</li></ul></td> 
+</tr>
+<tr>
+<td>MySQL Rejoin Unsafe</td>
+<td>The MySQL Rejoin Unsafe errand forces a node to rejoin a cluster.</td>
+<td><ul><li>Only run the MySQL Rejoin Unsafe errand if a node falls out of sync with the cluster.</li></ul></td>
+</tr>
 </table>
 
 ##<a id="view-errands"></a> View Errands ##
