@@ -17,13 +17,30 @@ Ops files specify operations to perform on the Cloud Foundry deployment [manifes
 
 You can use ops files to configure the manifest for Elastic Runtime by adding Pivotal defaults, [errands](https://bosh.io/docs/terminology.html#errand), and [releases](https://bosh.io/docs/terminology.html#release) to your deployment.
 
-The following table lists the available ops files and describes the functionality they add to your deployment. The table also specifies whether an ops file is required, recommended, or optional. Visit the `1.9` branch of the `p-ert-bosh-experiment` GitHub [repo](https://github.com/pivotal-cf/p-ert-bosh-experiment/tree/1.9) to view all available ops files. 
+The following table lists the available ops files and describes the functionality they add to your deployment. The table also specifies whether an ops file is required, recommended, or optional. 
+
+Visit the `1.9` branch of the `p-ert-bosh-experiment` GitHub [repo](https://github.com/pivotal-cf/p-ert-bosh-experiment/tree/1.9) and see the `opsfiles` directory within `cf-deployment` to view all available ops files. 
 
 <table>
 <tr>
 <th>Name</th>
 <th>Purpose</th>
 <th>Status</th>
+</tr>
+<tr>
+<td><code>gcp.yml</code></a></td>
+<td>This ops file in <code>cf-deployment/opsfiles</code> customizes the Cloud Foundry deployment manifest for Google Cloud Platform (GCP).</td>
+<td>Required if deploying on GCP</td>
+</tr>
+<tr>
+<td><code>tcp-routing-gcp.yml</code></a></td>
+<td>This ops file in <code>cf-deployment/opsfiles</code> customizes the Cloud Foundry deployment manifest for TCP routing in GCP.</td>
+<td>Required if deploying on GCP</td>
+</tr>
+<tr>
+<td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/pivotal-defaults.yml">Pivotal Defaults</a></td>
+<td>This ops file customizes the Cloud Foundry deployment manifest with Elastic Runtime defaults for values such as the number of Diego cell instances or the default application security group.</td>
+<td>Required</td>
 </tr>
 <tr>
 <td><a href="https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/pivotal-defaults.yml">Pivotal Defaults</a></td>
@@ -107,9 +124,9 @@ Perform the following steps to install Elastic Runtime:
 	<pre class="terminal">
 	$ mkdir ~/pcf
 	</pre>
-1. Move the Cloud Foundry deployment [manifest](https://github.com/cloudfoundry/cf-deployment/blob/master/cf-deployment.yml#0.0.0) that you downloaded in the [Uploading the Stemcell](upload-stemcell.html) topic into the `pcf` folder.
+1. Move the `cf-deployment` directory that you created in the [Uploading the Stemcell](upload-stemcell.html) topic into the `pcf` folder.
 	<pre class="terminal">
-	$ mv cf-deployment.yml ~/pcf/cf-deployment.yml
+	$ mv cf-deployment/ pcf/
 	</pre>
 1. Download the tarballed `cf-release` v246.0.2 and place it into a new directory in `pcf` called `closed-source-releases`.
 1. Download any additional required tarballed releases into the `closed-source-releases` directory of `pcf`.
@@ -131,6 +148,8 @@ Perform the following steps to install Elastic Runtime:
 1. Generate your base deployment manifest with `bosh interpolate`. The following example includes all available ops files, along with their required variables. Your exact command may be different depending on the functionality you want to add. Refer to the above [section](#ops-files) for more information.
 	<pre class="terminal">
 	$ bosh interpolate -d cf cf-deployment/cf-deployment.yml \
+	  --ops-file cf-deployment/opsfiles/gcp.yml \
+	  --ops-file cf-deployment/opsfiles/tcp-routing-gcp.yml \	
 	  --ops-file p-ert/pivotal-defaults.yml \
 	  --ops-file p-ert/ip-overrides.yml \
 	  --ops-file p-ert/mysql-proxy.yml \

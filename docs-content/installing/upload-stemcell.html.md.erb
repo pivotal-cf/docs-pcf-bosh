@@ -13,9 +13,9 @@ To perform the procedures in this topic, you must have completed the steps in [P
 
 ##<a id='determine'></a> Step 1: Determine Correct Stemcell Version
 
-1. Visit the `cf-deployment` GitHub [repo](https://github.com/cloudfoundry/cf-deployment) to download the `0.0.0` version of the canonical Cloud Foundry deployment [manifest](https://github.com/cloudfoundry/cf-deployment/blob/master/cf-deployment.yml#0.0.0).
+1. Download the tarballed `0.0.0` version of the `cf-deployment` [release](https://github.com/cloudfoundry/cf-deployment/releases/tag/0.0.0) and unzip it.
 
-1. In the final lines of the deployment manifest, locate the top-level property `stemcells` and retrieve the values for `os` and `version`. The following example specifies an Ubuntu Trusty 3312.12 stemcell.
+1. Open the Cloud Foundry deployment manifest, `cf-deployment.yml`. In the final lines of the deployment manifest, locate the top-level property `stemcells` and retrieve the values for `os` and `version`. The following example specifies an Ubuntu Trusty 3312.12 stemcell.
 
 	```
 	stemcells:
