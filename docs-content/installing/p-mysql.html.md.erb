@@ -13,8 +13,63 @@ To perform the procedures in this topic, you must have successfully deployed Ela
 
 ##<a id='overview'></a> Overview
 
-MySQL for PCF registers a service broker on Elastic Runtime and exposes its service plans on the Marketplace. Developers can provision MySQL databases by creating instances of the service plans using [Apps Manager](docs.pivotal.io/pivotalcf/console/) or the [cf Command Line Interface (CLI)](http://docs.pivotal.io/pivotalcf/cf-cli/).
+MySQL for PCF enables Elastic Runtime developers to provision MySQL databases by creating instances of the service plans in the Marketplace using [Apps Manager](docs.pivotal.io/pivotalcf/console/) or the [cf Command Line Interface (CLI)](http://docs.pivotal.io/pivotalcf/cf-cli/).
 
+## <a id='vars'></a>Step 1: Create a MySQL Variables File
 
+Create a YAML file called `p-mysql-vars.yml` with the following contents:
 
+```
+# MySQL config #
+cf_mysql_external_host: p-mysql.YOUR-SYSTEM-DOMAIN
 
+# MySQL Monitoring config #
+mysql_monitoring_recipient_email: user@example.com
+mysql_monitoring_cluster_identifier: "p-mysql-YOUR-CLUSTER-IDENTIFIER"
+
+# Cloud Foundry config #
+
+cf_api_url: https://api.YOUR-SYSTEM-DOMAIN
+cf_uaa_admin_client_secret: $(bosh int cf-vars-store/*-cf-vars-store.yml --path /uaa_admin_client_secret)
+cf_admin_username: admin
+cf_admin_password: $(bosh int ~/pcf/cf-vars.yml --path /uaa_scim_users_admin_password)
+cf_app_domains: YOUR-APPS-DOMAIN
+cf_sys_domain: YOUR-SYSTEM-DOMAIN
+cf_skip_ssl_validation: true
+cf_nats:
+  password: $(bosh int ~/pcf/cf-vars.yml --path /nats_password)
+  machines:   
+  - NATS_IP_1
+  - NATS_IP_2
+  user: nats
+  port: 4222
+```
+
+This configuration assumes your Elastic Runtime variables store file is at `~/pcf/cf-vars.yml`, which is where it is located if you followed the procedures in the [Configuring and Installing Elastic Runtime](ert.html) topic.
+
+## <a id='manifest'></a>Step 2: Prepare the Manifest
+
+1. Download the [deployment manifest](https://github.com/pivotal-cf-experimental/p-mysql-deployment/blob/master/p-mysql-deployment.yml) for MySQL for PCF. 
+1. Download the MySQL for PCF overrides [file](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/ops-files/p-mysql-overrides.yml) from the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci) and customize it as needed. The existing overrides file is written for a Google Cloud Platform (GCP) deployment, so you may need to modify it for your IaaS.
+1. Generate your base deployment manifest with `bosh interpolate`:
+	<pre class="terminal">
+	$ bosh interpolate -d p-mysql p-mysql-deployment.yml \
+	    --ops-file p-mysql-overrides.yml \
+	    --vars-file p-mysql-vars.yml \
+	    --var-errs-unused \
+	    &gt; p-mysql-base.yml
+	</pre>
+1. Modify the base manifest `p-mysql-base.yml` as needed and save the final manifest as `p-mysql.yml`.
+
+## <a id='deploy'></a>Step 3: Deploy
+
+1. Ensure that you are logged in to your BOSH Director.
+1. Deploy MySQL for PCF:
+	<pre class="terminal">
+	$ bosh deploy -d p-mysql p-mysql.yml \
+	  --vars-store mysql-vars-store.yml
+	  --var-errs-unused \
+	  --var-errs
+	</pre>
+
+After the deployment finishes, continue to the [Running Errands in MySQL for PCF](running-errands-p-mysql.html).

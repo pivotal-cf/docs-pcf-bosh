@@ -4,3 +4,82 @@ owner: PCF BOSH
 ---
 
 <strong><%= modified_date %></strong>
+
+This topic describes how to run errands in MySQL for Pivotal Cloud Foundry (PCF). To perform the procedures in this topic, you must have deployed MySQL for PCF by following the steps in [Configuring and Installing MySQL for PCF](p-mysql.html).
+
+##<a id='understand-errands'></a> Understand Errands ##
+
+The following table provides information about the errands in MySQL for PCF:
+
+<table>
+<tr>
+<th>Errand</th>
+<th>Purpose</th>
+<th>Frequency</th>
+</tr>
+<tr>
+<td>Broker Registrar</td>
+<td>The Broker Registrar errand registers a service broker on Elastic Runtime and exposes the MySQL for PCF service plans on the Marketplace.</td>
+<td><ul><li>Running the Broker Registrar errand after each deploy is <strong>required</strong>.</li></ul></td>
+</tr>
+<tr>
+<td>Broker Deregistrar</td>
+<td>The Broker Deregistrar errand deregisters the service broker from Elastic Runtime and removes the MySQL for PCF service plans from the Marketplace.</td>
+<td><ul><li>Only run the Broker Deregistrar errand if you want to remove MySQL for PCF service plans from the Marketplace.</li></ul></td>
+</tr>
+<tr>
+<td>MySQL Recovery Bootstrap</td>
+<td>The MySQL Recovery Bootstrap errand restarts a MySQL Galera cluster.</td>
+<td><ul><li>Only run the MySQL Recovery Bootstrap errand if a cluster has lost quorum.</li></ul></td> 
+</tr>
+<tr>
+<td>MySQL Rejoin Unsafe</td>
+<td>The MySQL Rejoin Unsafe errand forces a node to rejoin a cluster.</td>
+<td><ul><li>Only run the MySQL Rejoin Unsafe errand if a node falls out of sync with the cluster.</li></ul></td>
+</tr>
+<tr>
+<td>Smoke Tests</td>
+<td>The Smoke Tests errand runs basic functionality tests against MySQL for PCF.</td>
+<td><ul><li>Running the smoke test errand after each deploy is <strong>recommended</strong>.</li> <li>Running the smoke test errand regularly is <strong>optional</strong>.</li></td>
+</tr>
+<tr>
+<td>Verify Cluster Schemas</td>
+<td>The Verify Cluster Schemas verifies that the schemas of a cluster are consistent.</td>
+<td><ul><li>Only run the Verify Cluster Schemas errand if you are having problems with your cluster.</li></ul></td>
+</tr>
+</table>
+
+##<a id="view-errands"></a> View Errands ##
+
+To view the available errands in MySQL for PCF, run the following command:
+
+<pre class="terminal">
+$ bosh errands -d p-mysql
+
+Using environment 'example.com' as 'director'
+
+Using deployment 'p-mysql'
+
+Name
+verify-cluster-schemas
+smoke-tests
+rejoin-unsafe
+broker-registrar
+bootstrap
+broker-deregistrar
+
+6 errands
+
+Succeeded
+</pre>
+
+##<a id='run-errand'></a> Run an Errand ##
+
+To run an errand, perform the following command:
+
+<pre class="terminal">$ bosh run errand ERRAND-NAME</pre>
+
+Use the following optional flags:
+
+* `--download-logs`
+* `--logs-dir DESTINATION-DIRECTORY`
