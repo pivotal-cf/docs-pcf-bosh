@@ -1,0 +1,63 @@
+---
+title: Configuring and Installing MySQL for PCF
+owner: PCF BOSH
+---
+
+<strong><%= modified_date %></strong>
+
+This topic describes how to configure and install MySQL for Pivotal Cloud Foundry (PCF). 
+
+To perform the procedures in this topic, you must have successfully deployed Elastic Runtime.
+
+<p class="note"><strong>Note</strong>: To automate deploying MySQL for PCF, see the <a href="../automating/pipeline.html#deploy-mysql">Deploy MySQL for PCF</a> section of the <em>Building a Pipeline</em> topic.</p>
+
+##<a id='overview'></a> Overview
+
+MySQL for PCF registers a service broker on Elastic Runtime and exposes its service plans on the Marketplace. Developers can provision MySQL databases by creating instances of the service plans using [Apps Manager](docs.pivotal.io/pivotalcf/console/) or the [cf Command Line Interface (CLI)](http://docs.pivotal.io/pivotalcf/cf-cli/).
+
+## <a id='vars'></a>Step 1: Create a MySQL Variables Template
+
+1. Create a YAML file called `p-mysql-vars-template.yml` with the following contents:
+
+```
+################
+# MySQL config #
+################
+cf_mysql_external_host: p-mysql.$(jq -r .sys_domain terraform-state/metadata)
+###########################
+# MySQL Monitoring config #
+###########################
+mysql_monitoring_recipient_email: not-a-real-email@example.com
+mysql_monitoring_cluster_identifier: "p-mysql-$(cat terraform-state/name)"
+########################
+# Cloud Foundry config #
+########################
+cf_api_url: https://api.$(jq -r .sys_domain terraform-state/metadata)
+cf_uaa_admin_client_secret: $(bosh int cf-vars-store/*-cf-vars-store.yml --path /uaa_admin_client_secret)
+cf_admin_username: admin
+cf_admin_password: $(bosh int cf-vars-store/*-cf-vars-store.yml --path /uaa_scim_users_admin_password)
+cf_app_domains: [$(jq -r .apps_domain terraform-state/metadata)]
+cf_sys_domain: $(jq -r .sys_domain terraform-state/metadata)
+cf_skip_ssl_validation: true
+cf_nats:
+  password: $(bosh int cf-vars-store/*-cf-vars-store.yml --path /nats_password)
+  machines: ((nats_ips))
+  user: nats
+  port: 4222
+```
+
+
+Log in to BOSH
+
+bosh -n interpolate p-mysql-vars-template.yml \
+    -l pcf-bosh-ci/vars-files/gcp-nats-ips.yml > p-mysql-vars.yml
+
+cp mysql-vars-store/*-mysql-vars-store.yml new-mysql-vars-store/mysql-vars-store.yml
+
+bosh -n deploy p-mysql-deployment/p-mysql-deployment.yml \
+  --deployment p-mysql \
+  --ops-file pcf-bosh-ci/ops-files/p-mysql-overrides.yml \
+  --vars-file p-mysql-vars.yml \
+  --vars-store new-mysql-vars-store/mysql-vars-store.yml
+
+
