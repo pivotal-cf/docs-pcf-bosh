@@ -100,4 +100,59 @@ This part of the pipeline contains the `deploy-ert` job, which executes two shel
 
 <p class="note"><strong>Note</strong>: To deploy Elastic Runtime manually, see the <a href="../installing/ert.html">Configuring and Installing Elastic Runtime</a> topic.</p>
 
+##<a id='ert-errands'></a> Run Errands for Elastic Runtime
+
+This part of the pipeline runs several errands for Elastic Runtime. The jobs that run these errands are distributed over multiple columns. 
+
+All of the jobs execute the same shell [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/run-errand.sh). The script uses the BOSH CLI to run a particular errand, passed as a parameter by the pipeline configuration [file](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/pipelines/pcf-bosh.yml).
+
+The screenshot below displays only those jobs that run errands for Elastic Runtime.
+
+<%= image_tag('pipeline-ert-errands.png') %>
+
+<p class="note"><strong>Note</strong>: Click <a href="./images/pipeline-ert-errands.png">here</a> to see a larger version of this image.</p>
+
+###<a id='column-one'></a> Column One
+
+The first column in this part of the pipeline contains the following jobs:
+
+* `deploy-autoscaling` runs the Deploy Autoscaling [errand](https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/deploy-autoscaling.yml), which installs the Autoscaling release on the Elastic Runtime deployment.
+* `mysql-bootstrap` runs the MySQL Recovery Bootstrap [errand](https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/errands/mysql-recovery/bootstrap.yml), which restarts a MySQL Galera cluster. 
+* `mysql-rejoin-unsafe` runs the MySQL Rejoin Unsafe [errand](https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/mysql-recovery/rejoin-unsafe.yml), which forces a node to rejoin a cluster.
+* `push-pivotal-account` runs the Push Pivotal Account [errand](https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/push-pivotal-account.yml), which deploys the [Pivotal Account](https://docs.pivotal.io/pivotalcf/opsguide/pivotal-account.html) release.
+* `deploy-notifications` runs the Deploy Notifications [errand](https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/deploy-notifications.yml), which deploys the [Notifications](http://docs.pivotal.io/pivotalcf/adminguide/notifications.html) release.
+
+The jobs run against the following resources:
+
+* `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
+* `bosh-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the BOSH Director. The shell script executed by the jobs executes another [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/scripts/director-environment) that loads the credentials into the environment so that the BOSH CLI can run the errands.
+* `cf-deployment` is the `cf-deployment` GitHub [repo](https://github.com/cloudfoundry/cf-deployment) that contains the Cloud Foundry deployment manifest. 
+* `cf-vars-store` is the file that contains the Cloud Foundry deployment credentials, retrieved from the GCS bucket. 
+* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the jobs. 
+
+###<a id='column-two'></a> Column Two
+
+The second column in this part of the pipeline contains the following jobs:
+
+* `autoscaling-register-broker` runs the Autoscaling Register Broker [errand](https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/autoscaling-register-broker.yml), which registers the Autoscaler service on the [Marketplace](https://docs.pivotal.io/pivotalcf/1-9/devguide/services/managing-services.html).
+* `deploy-notifications-ui` runs the Deploy Notifications UI [errand](https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/deploy-notifications-ui.yml), which installs the Notifications UI release on the Elastic Runtime deployment. 
+* `push-apps-manager` runs the Push Apps Manager [errand](https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/1.9/errands/push-apps-manager.yml), which installs [Apps Manager](https://docs.pivotal.io/pivotalcf/console/index.html) on the Elastic Runtime deployment.
+
+The jobs run against the following resources:
+
+* `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
+* `bosh-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the BOSH Director. The shell script executed by the jobs executes another [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/scripts/director-environment) that loads the credentials into the environment so that the BOSH CLI can run the errands.
+* `cf-deployment` is the `cf-deployment` GitHub [repo](https://github.com/cloudfoundry/cf-deployment) that contains the Cloud Foundry deployment manifest. 
+* `cf-vars-store` is the file that contains the Cloud Foundry deployment credentials, retrieved from the GCS bucket. 
+* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the jobs. 
+
+###<a id='column-three'></a> Column Three
+
+The third column in this part of the pipeline contains the `smoke-tests` job, which runs the Smoke Tests errand that executes basic functionality tests against Elastic Runtime. The job runs against the following resources:
+
+* `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
+* `bosh-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the BOSH Director. The shell script executed by the jobs executes another [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/scripts/director-environment) that loads the credentials into the environment so that the BOSH CLI can run the errands.
+* `cf-vars-store` is the file that contains the Cloud Foundry deployment credentials, retrieved from the GCS bucket. 
+* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the jobs. 
+
 
