@@ -165,4 +165,11 @@ This part of the pipeline deploys MySQL for PCF. MySQL for PCF enables Elastic R
 
 <p class="note"><strong>Note</strong>: Not all of the resources used by the <code>deploy-mysql</code> job are visible in this screenshot.</p>
 
-This part of the pipeline contains the `deploy-mysql` job, which executes a shell [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/deploy-mysql.sh) that uses the BOSH CLI to deploy MySQL for PCF. 
+The `deploy-mysql` job executes a shell [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/deploy-mysql.sh) that uses the BOSH CLI to deploy MySQL for PCF. It runs against the following resources:
+
+* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the script and task required to run the jobs. 
+* `p-mysql-deployment` is the `p-mysql-deployment` GitHub [repo](https://github.com/pivotal-cf-experimental/p-mysql-deployment) that contains the deployment [manifest](https://github.com/pivotal-cf-experimental/p-mysql-deployment/blob/master/p-mysql-deployment.yml) for MySQL for PCF.
+* `mysql-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the MySQL for PCF deployment.
+* `cf-vars-store` is the variables store, retrieved from the GCS bucket, that contains the Cloud Foundry deployment credentials.
+* `bosh-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the BOSH Director. 
+* `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
