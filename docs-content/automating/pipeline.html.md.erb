@@ -201,3 +201,31 @@ Both jobs run against the following resources:
 
 <p class="note"><strong>Note</strong>: To run errands for MySQL for PCF manually, see the <a href="../installing/running-errands-mysql.html">Running Errands for MySQL for PCF</a> topic.</p>
 
+##<a id='acceptance-tests'></a> Run Acceptance Tests
+
+<p class="note"><strong>Note</strong>: This section is intended for development and test environments only.</p>
+
+This part of the pipeline runs the [Cloud Foundry Acceptance Tests](https://github.com/cloudfoundry/cf-acceptance-tests) (CATS) and the [Routing Acceptance Tests](https://github.com/cloudfoundry-incubator/routing-acceptance-tests) (RATS) against the Elastic Runtime deployment. 
+
+<%= image_tag('pipeline-tests.png') %>
+
+This part of the pipeline contains the following jobs:
+
+* `run-cats` runs two shell scripts. The [first](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/enable-diego-docker.sh) enables Docker-based applications to run on the Elastic Runtime deployment. The [second](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/run-cats.sh) executes CATS. The jobs run against the following resources:
+
+	* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and tasks required to run the jobs. 
+	* `cf-acceptance-tests` is the CATS GitHub [repo](https://github.com/cloudfoundry/cf-acceptance-tests).
+	* `cf-vars-store` is the file that contains the Cloud Foundry deployment credentials, retrieved from the GCS bucket. 
+	* `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
+
+* `run-rats` runs two shell scripts. The [first](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/fetch-routing-release.sh) clones the Cloud Foundry Routing release from its GitHub [repo](https://github.com/cloudfoundry-incubator/routing-release/). The [second](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/run-rats.sh) executes RATS. The jobs run against the following resources:
+
+
+	* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and tasks required to run the jobs. 
+	* `cf-acceptance-tests` is the CATS GitHub [repo](https://github.com/cloudfoundry/cf-acceptance-tests).
+	* `cf-deployment` is the `cf-deployment` GitHub [repo](https://github.com/cloudfoundry/cf-deployment) that contains the Cloud Foundry deployment manifest.
+	* `cf-vars-store` is the file that contains the Cloud Foundry deployment credentials, retrieved from the GCS bucket. 
+	* `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
+
+
+
