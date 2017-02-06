@@ -173,3 +173,5 @@ The `deploy-mysql` job executes a shell [script](https://github.com/pivotal-cf/p
 * `cf-vars-store` is the variables store, retrieved from the GCS bucket, that contains the Cloud Foundry deployment credentials.
 * `bosh-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the BOSH Director. 
 * `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
+
+<p class="note"><strong>Note</strong>: To run errands for MySQL for PCF manually, see the <a href="../installing/running-errands-mysql.html">Running Errands for MySQL for PCF</a> topic.</p>
