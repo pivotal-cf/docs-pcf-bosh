@@ -194,7 +194,7 @@ The second column in this part of the pipeline contains the `mysql-smoke-tests` 
 
 Both jobs run against the following resources:
 
-* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the jobs. 
+* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and tasks required to run the jobs. 
 * `bosh-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the BOSH Director.
 * `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
 * `mysql-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the MySQL for PCF deployment.
