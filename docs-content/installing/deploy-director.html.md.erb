@@ -27,44 +27,15 @@ The procedures in this topic and the rest of the <em>Installing and Configuring<
 
 ##<a id='deploy'></a> Step 2: Deploy
 
-Perform the following steps to deploy the BOSH Director with UAA:
-
-1. Clone the BOSH deployment manifest from the `bosh-deployment` GitHub [repo](https://github.com/cloudfoundry/bosh-deployment):
-
-	<pre class="terminal">$ git clone https://github.com/cloudfoundry/bosh-deployment ~/workspace/bosh-deployment</pre>
-
-1. Create a directory for your BOSH Director deployment:
-
-	<pre class="terminal">$ mkdir -p ~/deployments/bosh-1</pre>
-
-1. Deploy the BOSH Director. The specific command will vary depending on your IaaS. The following example deploys a BOSH Director on Amazon Web Services (AWS):
-
-	<pre class="terminal">
-	$ bosh create-env ~/workspace/bosh-deployment/bosh.yml \
-		--state ./state.json \
-		-o ~/workspace/bosh-deployment/aws/cpi.yml \
-		--vars-store ./creds.yml \
-		-v access_key_id=... \
-		-v secret_access_key=... \
-		-v region=us-east-1 \
-		-v az=us-east-1b \
-		-v default_key_name=bosh \
-		-v default_security_groups=[bosh] \
-		-v subnet_id=subnet-... \
-		-v director_name=bosh-1 \
-		-v internal_cidr=10.0.0.0/24 \
-		-v internal_gw=10.0.0.1 \
-		-v internal_ip=10.0.0.6 \
-		--var-file private_key=~/Downloads/bosh.pem
-	</pre>
-
+See the `bosh-deployment` GitHub [repo](https://github.com/cloudfoundry/bosh-deployment) for instructions on how to deploy the BOSH Director with UAA using the `bosh create-env` command. The specific procedure will vary depending on your IaaS.
+  		  
 ##<a id='alias'></a> Step 3: Alias Your BOSH Director
 
 The `bosh create-env` command generates a number of variables referenced by the BOSH deployment manifest and stores them in the variables store file. One of the generated variables is the CA certificate that the deployed BOSH Director uses for TLS. 
 
 To alias your BOSH Director, use `bosh interpolate` to extract the CA certificate from the variables store and pass it to `bosh alias-env`:
 
-<pre class="terminal">$ bosh alias-env bosh-1 -e 10.0.0.6 \
+<pre class="terminal">$ bosh alias-env bosh-1 -e DIRECTOR_ADDRESS \
 	--ca-cert <(bosh interpolate ./creds.yml --path /director_ssl/ca)
 </pre>
 
