@@ -227,5 +227,21 @@ This part of the pipeline contains the following jobs:
 	* `cf-vars-store` is the file that contains the Cloud Foundry deployment credentials, retrieved from the GCS bucket. 
 	* `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
 
+##<a id='delete-ert'></a> Delete Elastic Runtime
+
+<p class="note"><strong>Note</strong>: This section is intended for development and test environments only.</p>
+
+This part of the pipeline deletes the Elastic Runtime deployment.
+
+<%= image_tag('pipeline-delete-ert.png') %>
+
+<p class="note"><strong>Note</strong>: Not all of the resources used by the <code>delete-ert</code> job are visible in this screenshot.</p>
+
+The `delete-ert` job runs a shell [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/delete-deployment.sh) that uses the BOSH CLI to delete the Elastic Runtime deployment. The job runs against the following resources:
+
+* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the script and task required to run the job.
+* `bosh-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the BOSH Director. The `delete-deployment` script executes another [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/scripts/director-environment) that loads the credentials into the environment so that the BOSH CLI can delete the Elastic Runtime deployment.
+* `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
+
 
 
