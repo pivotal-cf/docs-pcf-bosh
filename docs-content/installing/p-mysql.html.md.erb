@@ -56,7 +56,6 @@ This configuration assumes your Elastic Runtime variables store file is at `~/pc
 	$ bosh interpolate -d p-mysql p-mysql-deployment.yml \
 	    --ops-file p-mysql-overrides.yml \
 	    --vars-file p-mysql-vars.yml \
-	    --var-errs-unused \
 	    &gt; p-mysql-base.yml
 	</pre>
 1. Modify the base manifest `p-mysql-base.yml` as needed and save the final manifest as `p-mysql.yml`.
@@ -68,8 +67,6 @@ This configuration assumes your Elastic Runtime variables store file is at `~/pc
 	<pre class="terminal">
 	$ bosh deploy -d p-mysql p-mysql.yml \
 	  --vars-store mysql-vars-store.yml
-	  --var-errs-unused \
-	  --var-errs
 	</pre>
 
 After the deployment finishes, continue to the [Running Errands for MySQL for PCF](running-errands-mysql.html).
