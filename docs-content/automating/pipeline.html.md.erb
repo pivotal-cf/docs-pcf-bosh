@@ -188,7 +188,7 @@ The screenshot below displays only those jobs that run errands for MySQL for PCF
 
 <p class="note"><strong>Note</strong>: Click <a href="./images/pipeline-mysql-errands.png">here</a> to see a larger version of this image.</p>
 
-The first column in this part of the pipeline contains the `broker-registrar` job. It runs the Broker Registrar errand, which registers a service broker on Elastic Runtime and exposes the MySQL for PCF service plans on the [Marketplace](https://docs.pivotal.io/pivotalcf/devguide/services/managing-services.html). 
+The first column in this part of the pipeline contains the `broker-registrar` job. It runs the Broker Registrar errand, which registers a service broker on Elastic Runtime and exposes the MySQL for PCF service plans on the Marketplace. 
 
 The second column in this part of the pipeline contains the `mysql-smoke-tests` job. It runs the Smoke Tests errand, which executes basic functionality tests against MySQL for PCF.
 
@@ -241,6 +241,22 @@ The `delete-ert` job runs a shell [script](https://github.com/pivotal-cf/pcf-bos
 
 * `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the script and task required to run the job.
 * `bosh-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the BOSH Director. The `delete-deployment` script executes another [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/scripts/director-environment) that loads the credentials into the environment so that the BOSH CLI can delete the Elastic Runtime deployment.
+* `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
+
+##<a id='delete-mysql'></a> Delete MySQL for PCF
+
+<p class="note"><strong>Note</strong>: This section is intended for development and test environments only.</p>
+
+This part of the pipeline deletes MySQL for PCF.
+
+The screenshot below displays only the job that deletes MySQL for PCF.
+
+<%= image_tag('pipeline-delete-mysql.png') %>
+
+The `delete-mysql` job runs two shell scripts. The [first](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/run-errand.sh) uses the BOSH CLI to run the Broker Deregistrar errand, which deregisters the service broker from Elastic Runtime and removes the MySQL for PCF service plans from the Marketplace. The [second](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/delete-deployment.sh) uses the BOSH CLI to delete the MySQL for PCF deployment. The job runs against the following resources:
+
+* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and tasks required to run the job.
+* `bosh-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the BOSH Director. Both scripts execute another [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/scripts/director-environment) that loads the credentials into the environment so that the BOSH CLI can run the errand and delete the MySQL for PCF deployment.
 * `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
 
 
