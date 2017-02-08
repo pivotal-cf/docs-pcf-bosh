@@ -5,4 +5,32 @@ owner: PCF BOSH
 
 <strong><%= modified_date %></strong>
 
-<p class="note"><strong>Note</strong>: This topic exists to show one possible structure of the PCF BOSH documentation. It may or may not display content at a later date.</p>
+This topic describes how to upgrade Elastic Runtime.
+
+To perform the procedures in this topic, you must have already deployed Elastic Runtime by following the instructions in the [Installing and Configuring](../installing/index.html) section.
+
+##<a id='stemcell'></a> Step 1: Upload Stemcell
+
+Follow the instructions in the [Uploading the Stemcell](../installing/upload-stemcell.html) topic for your desired version of [`cf-deployment`](https://github.com/cloudfoundry/cf-deployment).
+
+##<a id='deploy'></a> Step 2: Deploy
+
+1. Ensure you have the latest version of the `p-ert-bosh-experiment` GitHub [repo](https://github.com/pivotal-cf/p-ert-bosh-experiment).
+1. Download all required tarballed releases into the `closed-source-releases` directory.
+	<p class="note"><strong>Note</strong>: Installing a release requires both an <a href="../installing/ert.html#ops-files">ops file</a> and a tarballed release. The tarballed releases are not currently available from an official distribution channel.</p> 
+1. Follow the procedures in steps 8 through 10 of the [Step 2: Install Elastic Runtime](../installing/ert.html#deploy) section of the <em>Configuring and Installing Elastic Runtime</em> topic to generate your manifest and deploy Elastic Runtime.
+
+##<a id='errands'></a> Step 4: Run Errands
+
+Run your post-deploy errands by following the instructions in [Running Errands for Elastic Runtime](../installing/running-errands-ert.html). The following errands are recommended after deploying Elastic Runtime:
+
+* Smoke Tests
+* Push Apps Manager
+* Deploy Notifications
+* Deploy Notifications UI
+* Deploy Autoscaling
+* Autoscaling Register Broker
+* Push Pivotal Account
+
+If you have also deployed MySQL for PCF, follow the instructions in [Running Errands for MySQL for PCF](../installing/running-errands-mysql.html) to run the Broker Registrar errand, which re-registers the service broker on Elastic Runtime and exposes the MySQL for PCF service plans on the <a href="https://docs.pivotal.io/pivotalcf/devguide/services/managing-services.html">Marketplace</a>.
+
