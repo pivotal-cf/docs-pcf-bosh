@@ -5,4 +5,15 @@ owner: PCF BOSH
 
 <strong><%= modified_date %></strong>
 
-<p class="note"><strong>Note</strong>: This topic exists to show one possible structure of the PCF BOSH documentation. It may or may not display content at a later date.</p>
+This topic provides a reference [Concourse](https://concourse.ci/introduction.html) pipeline configuration to automate the upgrading of your Pivotal Cloud Foundry (PCF) deployment, and explains what each part of the pipeline does.
+
+Concourse is a CI/CD solution. For more information about installing Concourse, see the [documentation](https://concourse.ci/installing.html).
+
+This pipeline keeps your PCF components up to date with the latest versions and does not run destructive tests. As a result, this pipeline is better suited for production purposes than the fresh deploy pipeline described in the [Building a Fresh Deploy Pipeline](fresh-pipeline.html) topic, which is designed for development and test environments.
+
+<p class="note"><strong>Note</strong>: This topic is currently in development.</p>
+
+##<a id='operator'></a> Building an Upgrade Pipeline as an Operator
+
+##<a id='developer'></a> Building an Upgrade Pipeline as a Developer
+
