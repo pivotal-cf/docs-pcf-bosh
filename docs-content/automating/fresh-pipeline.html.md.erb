@@ -9,13 +9,15 @@ This topic provides a reference [Concourse](https://concourse.ci/introduction.ht
 
 Concourse is a CI/CD solution. For more information about installing Concourse, see the [documentation](https://concourse.ci/installing.html).
 
+This pipeline creates a fresh deploy of PCF and runs destructive tests. It also tears down the environment. As a result, this pipeline is designed for development and test environments. For a pipeline that is better suited for production purposes, see the [Building a Upgrade Pipeline](upgrade-pipeline.html) topic.
+
 ##<a id='understand'></a> Understand Concourse Pipelines
 
 A Concourse pipeline is a collection of jobs and resources. Jobs determine the actions performed by the pipeline, while resources are the objects used by those jobs. For more information, see the [Mechanics of a Pipeline](https://concourse.ci/pipeline-mechanics.html) topic in the Concourse documentation.
 
-View the reference pipeline at the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci). This repo includes YAML files, scripts, and the other configuration  needed to build the reference pipeline. 
+View the reference pipelines at the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci). This repo includes YAML files, scripts, and the other configuration  needed to build the reference pipeline. 
 
-The Concourse web interface visualizes the pipeline configuration as a series of jobs and resources. In the web interface, the reference pipeline looks like the following: 
+The Concourse web interface visualizes the pipeline configuration as a series of jobs and resources. In the web interface, the fresh deploy pipeline looks like the following: 
 
 <a href="./images/pipeline.png"><%= image_tag('pipeline.png') %></a>
 
