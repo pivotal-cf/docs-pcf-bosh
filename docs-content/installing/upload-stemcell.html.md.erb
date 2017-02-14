@@ -13,7 +13,21 @@ To perform the procedures in this topic, you must have completed the steps in [P
 
 ##<a id='determine'></a> Step 1: Determine Correct Stemcell Version
 
-1. Download the tarballed `0.0.0` version of the `cf-deployment` [release](https://github.com/cloudfoundry/cf-deployment/releases/tag/0.0.0) and unzip it.
+1. Create a `workspace` directory if you do not already have one: 
+	<pre class="terminal">
+	$ mkdir -p ~/workspace
+	</pre>
+
+1. Clone the `cf-deployment` GitHub [repo](https://github.com/cloudfoundry/cf-deployment) into your `workspace`:
+	<pre class="terminal">
+	$ git clone https://github.com/cloudfoundry/cf-deployment.git ~/workspace/cf-deployment
+	</pre>
+
+1. Change into `cf-deployment` and check out the `0.0.0` tag:
+	<pre class="terminal">
+	$ cd ~/workspace/cf-deployment
+	$ git checkout 0.0.0
+	</pre>
 
 1. Open the Cloud Foundry deployment manifest, `cf-deployment.yml`. In the final lines of the deployment manifest, locate the top-level property `stemcells` and retrieve the values for `os` and `version`. The following example specifies an Ubuntu Trusty 3312.12 stemcell.
 

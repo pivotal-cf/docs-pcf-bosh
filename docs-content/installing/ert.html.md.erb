@@ -120,29 +120,17 @@ To install Elastic Runtime, you use the BOSH CLI to deploy the Cloud Foundry dep
 
 Perform the following steps to install Elastic Runtime:
 
-1. Create a new directory called `pcf` in your home directory:
+1. Clone the `p-ert-bosh-experiment` GitHub [repo](https://github.com/pivotal-cf/p-ert-bosh-experiment) into your `workspace`:
 	<pre class="terminal">
-	$ mkdir ~/pcf
+	$ git clone http<span>s:</span>//github.com/pivotal-cf/p-ert-bosh-experiment.git ~/workspace/p-ert
 	</pre>
-1. Move the `cf-deployment` directory that you created in the [Uploading the Stemcell](upload-stemcell.html) topic into the `pcf` folder.
+1. Change into the `p-ert` directory and check out the `1.9` branch:
 	<pre class="terminal">
-	$ mv cf-deployment/ pcf/
+	$ cd ~/workspace/p-ert
+	$ git checkout 1.9
 	</pre>
-1. Download all required tarballed releases into the `closed-source-releases` directory of `pcf`.
+1. Download all required tarballed releases.
 	<p class="note"><strong>Note</strong>: Installing a release requires both an ops file and a tarballed release. The tarballed releases are not currently available from an official distribution channel.</p>
-1. Clone the `p-ert-bosh-experiment` GitHub [repo](https://github.com/pivotal-cf/p-ert-bosh-experiment/tree/1.9) into a new directory called `p-ert` in `pcf`:
-	<pre class="terminal">
-	$ git clone http<span>s:</span>//github.com/pivotal-cf/p-ert-bosh-experiment.git ~/pcf/
-	</pre>
-1. Change into the `p-ert` directory and change to the `1.9` branch:
-	<pre class="terminal">
-	$ cd ~/pcf/p-ert && git checkout 1.9
-	</pre>
-
-1. Change into the `pcf` directory:
-	<pre class="terminal">
-	$ cd ~/pcf
-	</pre>
 1. Ensure that you are logged in to your BOSH Director.
 1. Generate your base deployment manifest with `bosh interpolate`. The following example includes all available ops files, along with their required variables. Your exact command may be different depending on the functionality you want to add. Refer to the above [section](#ops-files) for more information.
 	<pre class="terminal">
@@ -169,19 +157,19 @@ Perform the following steps to install Elastic Runtime:
 	  --var "smtp\_host\_port=25" \
 	  --var "smtp\_sender\_username=user<span>@</span>example.com" \
 	  --var "smtp\_sender\_password=password" \
-	  --var "cf\_release\_path=file://$(ls "$PWD"/closed-source-releases/cf-246&ast;.tgz)" \
+	  --var "cf\_release\_path=file://PATH-TO-CLOSED-SOURCE-RELEASES/cf-246.0.2.tgz)" \
 	  --var "cf\_release\_version=246.0.2" \
-	  --var "notifications\_release\_path=file://$(ls "$PWD"/closed-source-releases/notifications-31&ast;.tgz)" \
+	  --var "notifications\_release\_path=file://PATH-TO-CLOSED-SOURCE-RELEASE/notifications-31.tgz)" \
 	  --var "notifications\_release\_version=31" \
-	  --var "notifications\_ui\_release\_path=file://$(ls "$PWD"/closed-source-releases/notifications-ui&ast;.tgz)" \
+	  --var "notifications\_ui\_release\_path=file://PATH-TO-CLOSED-SOURCE-RELEASE/notifications-ui-26.tgz)" \
 	  --var "notifications\_ui\_release\_version=26" \
-	  --var "cf\_autoscaling\_release\_path=file://$(ls "$PWD"/closed-source-releases/cf-autoscaling&ast;.tgz)" \
+	  --var "cf\_autoscaling\_release\_path=file://PATH-TO-CLOSED-SOURCE-RELEASE/cf-autoscaling-67.tgz)" \
 	  --var "cf\_autoscaling\_release\_version=67" \
-	  --var "push\_apps\_manager\_release\_path=file://$(ls "$PWD"/closed-source-releases/push-apps-manager&ast;.tgz)" \
+	  --var "push\_apps\_manager\_release\_path=file://PATH-TO-CLOSED-SOURCE-RELEASE/push-apps-manager-659.7.tgz)" \
 	  --var "push_apps\_manager\_release\_version=659.7" \
-	  --var "mysql\_monitoring\_release\_path=file://$(ls "$PWD"/closed-source-releases/mysql-monitoring&ast;.tgz)" \
+	  --var "mysql\_monitoring\_release\_path=file://PATH-TO-CLOSED-SOURCE-RELEASE/mysql-monitoring-6.tgz)" \
 	  --var "mysql\_monitoring\_release\_version=6" \
-	  --var "pivotal\_account\_release\_path=file://$(ls "$PWD"/closed-source-releases/pivotal-account&ast;.tgz)" \
+	  --var "pivotal\_account\_release\_path=file://PATH-TO-CLOSED-SOURCE-RELEASE/pivotal-account-1.tgz)" \
 	  --var "pivotal\_account\_release\_version=1" \
 	  &gt; cf-base.yml
 	</pre>
