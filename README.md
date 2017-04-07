@@ -39,6 +39,6 @@ To use Bookbinder to view your documentation, perform the following steps:
 1. Run `bookbinder bind local` to build a Rack web-app of the book.
 1. `cd` into the `final_app` directory.
 1. Log into [PEZ HeritageCF](https://apps.run.pez.pivotal.io) and target the appropriate org and space: `cf login -a api.run.pez.pivotal.io -o pcf-bosh -s pcf-bosh --sso`. You'll need to follow the link provided by the `cf` CLI, and then make sure to choose the option to log in with Okta.
-1. Run `cf push pcf-bosh-docs -b ruby_buildpack`.
+1. Run `cf push bosh-native-pcf-docs -b ruby_buildpack -d pezapp.io`.
 
-After the push command has completed, view the docs at https://pcf-bosh-docs.cfapps.pez.pivotal.io/
+After the push command has completed, view the docs at https://bosh-native-pcf-docs.pezapp.io/
