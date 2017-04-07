@@ -1,6 +1,6 @@
 ---
 title: Building a Fresh Deploy Pipeline
-owner: PCF BOSH
+owner: BOSH-Native PCF
 ---
 
 <strong><%= modified_date %></strong>
@@ -15,7 +15,7 @@ This pipeline creates a fresh deploy of PCF and runs destructive tests. It also 
 
 A Concourse pipeline is a collection of jobs and resources. Jobs determine the actions performed by the pipeline, while resources are the objects used by those jobs. For more information, see the [Mechanics of a Pipeline](https://concourse.ci/pipeline-mechanics.html) topic in the Concourse documentation.
 
-View the reference pipelines at the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci). This repo includes YAML files, scripts, and the other configuration  needed to build the reference pipeline. 
+View the reference pipelines at the BOSH-Native PCF CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci). This repo includes YAML files, scripts, and the other configuration  needed to build the reference pipeline. 
 
 The Concourse web interface visualizes the pipeline configuration as a series of jobs and resources. In the web interface, the fresh deploy pipeline looks like the following: 
 
@@ -27,17 +27,17 @@ The following sections explain what each part of the pipeline does, proceeding f
 
 ##<a id='prepare'></a> Prepare Your Environment
 
-The first part of the pipeline prepares your environment for PCF BOSH. 
+The first part of the pipeline prepares your environment for BOSH-Native PCF. 
 
-<p class="note"><strong>Note</strong>: See the reference pipeline YAML <a href="https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/pipelines/pcf-bosh.yml">file</a> in the PCF BOSH CI GitHub repo.</p>
+<p class="note"><strong>Note</strong>: See the reference pipeline YAML <a href="https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/pipelines/pcf-bosh.yml">file</a> in the BOSH-Native PCF CI GitHub repo.</p>
 
 <%= image_tag('pipeline-prepare-env.png') %>
 
 This part of the pipeline contains the `terraform-up` job, which uses the Terraform Concourse Resource to prepare a Google Cloud Platform (GCP) environment for PCF. The job runs against the following resources:
 
 * `terraform` is the [Terraform Concourse Resource](https://github.com/ljfranklin/terraform-resource) that prepares the GCP environment.
-* `terraform-vars` is the Terraform variables file that contains information about the GCP environment such as the environment name, the region, and the service account key. In the reference pipeline, this file is retrieved from the PCF BOSH CI Google Cloud Storage (GCS) bucket.
-* `terraforming-gcp` is the set of Terraform configuration files that the Terraform Concourse Resource uses, loading variables from the `terraform-vars` file. These configuration files are retrieved from the PCF BOSH Terraforming GCP GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-terraforming-gcp).
+* `terraform-vars` is the Terraform variables file that contains information about the GCP environment such as the environment name, the region, and the service account key. In the reference pipeline, this file is retrieved from the BOSH-Native PCF CI Google Cloud Storage (GCS) bucket.
+* `terraforming-gcp` is the set of Terraform configuration files that the Terraform Concourse Resource uses, loading variables from the `terraform-vars` file. These configuration files are retrieved from the BOSH-Native PCF Terraforming GCP GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-terraforming-gcp).
 
 <p class="note"><strong>Note</strong>: To prepare your environment with Terraform manually, see the <a href="../installing/prepare-env.html">Preparing Your Environment</a> topic.</p>
 
@@ -52,7 +52,7 @@ This part of the pipeline contains the `deploy-director` job. The job executes a
 * `terraform-state` is the state file outputted by the `terraform-up` job that ran in the previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
 * `bosh-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the BOSH Director. The first time the pipeline runs, BOSH generates the credentials. The variables in the file include those needed to deploy [`bosh-deployment`](https://github.com/cloudfoundry/bosh-deployment), with one addition: `credhub_aes_key`, a 128-bit hex-encoded AES key required for CredHub.
 * `bosh-state` is the state file for your BOSH deployment. The first time the pipeline runs, this file is blank. It must be seeded in the GCS bucket before the pipeline runs. For more information about deployment state files, see the [BOSH documentation](https://bosh.io/docs/using-bosh-init.html#deployment-state).
-* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/), which contains the [ops files](https://github.com/pivotal-cf/pcf-bosh-ci/tree/master/ops-files) that configure the BOSH deployment manifest for UAA and CredHub. Ops files specify operations to perform on the manifest.
+* `pcf-bosh-ci` is the BOSH-Native PCF CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/), which contains the [ops files](https://github.com/pivotal-cf/pcf-bosh-ci/tree/master/ops-files) that configure the BOSH deployment manifest for UAA and CredHub. Ops files specify operations to perform on the manifest.
 * `bosh-deployment` is the GitHub [repo](https://github.com/cloudfoundry/bosh-deployment) that contains the BOSH deployment manifest.
 
 <p class="note"><strong>Note</strong>: To deploy the BOSH Director with UAA and CredHub manually, see the <a href="../installing/deploy-director.html">Deploying the BOSH Director</a> topic.</p>
@@ -71,7 +71,7 @@ This part of the pipeline contains the following jobs:
 	<p class="note"><strong>Note</strong>: The Concourse web interface uses grey text to indicate resources that are not modified by the job.</p>
 	* `bosh-creds` is the file that contains the BOSH Director credentials outputted by the `deploy-director` job, retrieved from the GCS bucket. The second script executes another [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/scripts/director-environment) that loads the credentials into the environment so that the BOSH CLI can upload the stemcell.
 	* `cf-deployment` is the `cf-deployment` GitHub [repo](https://github.com/cloudfoundry/cf-deployment) that contains the Cloud Foundry deployment manifest.
-	* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the `upload-stemcell` job.
+	* `pcf-bosh-ci` is the BOSH-Native PCF CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the `upload-stemcell` job.
 
 	<p class="note"><strong>Note</strong>: To upload the stemcell manually, see the <a href="../installing/upload-stemcell.html">Uploading the Stemcell</a> topic.</p>
 
@@ -79,7 +79,7 @@ This part of the pipeline contains the following jobs:
 
 	* `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
 	* `bosh-creds` is the file that contains the BOSH Director credentials outputted by the `deploy-director` job, retrieved from the GCS bucket. The shell script executes another [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/scripts/director-environment) that loads the credentials into the environment so that the BOSH CLI can upload the cloud config.
-	* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the `upload-stemcell` job. 
+	* `pcf-bosh-ci` is the BOSH-Native PCF CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the `upload-stemcell` job. 
 	* `cloud-config` is the cloud config [file](https://github.com/pivotal-cf/p-ert-bosh-experiment/blob/master/cloud-config.yml), retrieved from the `p-ert-bosh-experiment` GitHub [repo](https://github.com/pivotal-cf/p-ert-bosh-experiment).
 
 	<p class="note"><strong>Note</strong>: To upload the cloud config manually, see the <a href="../installing/cloud-config.html">Applying the Cloud Config</a> topic.</p>
@@ -97,7 +97,7 @@ This part of the pipeline contains the `deploy-ert` job, which executes two shel
 * `cf-deployment` is the `cf-deployment` GitHub [repo](https://github.com/cloudfoundry/cf-deployment) that contains the Cloud Foundry deployment manifest. The shell script uses the BOSH CLI to deploy Cloud Foundry with this manifest.
 * `cf-vars-store` is the file that contains the Cloud Foundry deployment credentials, retrieved from the GCS bucket. The first time the pipeline runs, this file is blank. It must be seeded in the GCS bucket before the pipeline runs. 
 * `p-ert` is the `p-ert-bosh-experiment` GitHub [repo](https://github.com/pivotal-cf/p-ert-bosh-experiment) that contains the ops files that configure the Cloud Foundry deployment manifest for Elastic Runtime.
-* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the `deploy-pcf` job. 
+* `pcf-bosh-ci` is the BOSH-Native PCF CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the `deploy-pcf` job. 
 * `closed-source-releases-zip` is a zip containing the closed-source releases required for Elastic Runtime, retrieved from the GCS bucket. 
 
 <p class="note"><strong>Note</strong>: To deploy Elastic Runtime manually, see the <a href="../installing/ert.html">Configuring and Installing Elastic Runtime</a> topic.</p>
@@ -130,7 +130,7 @@ The jobs run against the following resources:
 * `bosh-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the BOSH Director. The shell script executed by the jobs executes another [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/scripts/director-environment) that loads the credentials into the environment so that the BOSH CLI can run the errands.
 * `cf-deployment` is the `cf-deployment` GitHub [repo](https://github.com/cloudfoundry/cf-deployment) that contains the Cloud Foundry deployment manifest. 
 * `cf-vars-store` is the file that contains the Cloud Foundry deployment credentials, retrieved from the GCS bucket. 
-* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the jobs. 
+* `pcf-bosh-ci` is the BOSH-Native PCF CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the jobs. 
 
 ###<a id='column-two'></a> Column Two
 
@@ -146,7 +146,7 @@ The jobs run against the following resources:
 * `bosh-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the BOSH Director. The shell script executed by the jobs executes another [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/scripts/director-environment) that loads the credentials into the environment so that the BOSH CLI can run the errands.
 * `cf-deployment` is the `cf-deployment` GitHub [repo](https://github.com/cloudfoundry/cf-deployment) that contains the Cloud Foundry deployment manifest. 
 * `cf-vars-store` is the file that contains the Cloud Foundry deployment credentials, retrieved from the GCS bucket. 
-* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the jobs. 
+* `pcf-bosh-ci` is the BOSH-Native PCF CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the jobs. 
 
 ###<a id='column-three'></a> Column Three
 
@@ -155,7 +155,7 @@ The third column in this part of the pipeline contains the `smoke-tests` job, wh
 * `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
 * `bosh-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the BOSH Director. The shell script executed by the jobs executes another [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/scripts/director-environment) that loads the credentials into the environment so that the BOSH CLI can run the errands.
 * `cf-vars-store` is the file that contains the Cloud Foundry deployment credentials, retrieved from the GCS bucket. 
-* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the jobs. 
+* `pcf-bosh-ci` is the BOSH-Native PCF CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the jobs. 
 
 <p class="note"><strong>Note</strong>: To run errands for Elastic Runtime manually, see the <a href="../installing/running-errands-ert.html">Running Errands for Elastic Runtime</a> topic.</p>
 
@@ -169,7 +169,7 @@ This part of the pipeline deploys MySQL for PCF. MySQL for PCF enables Elastic R
 
 The `deploy-mysql` job executes a shell [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/deploy-mysql.sh) that uses the BOSH CLI to deploy MySQL for PCF. It runs against the following resources:
 
-* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the jobs. 
+* `pcf-bosh-ci` is the BOSH-Native PCF CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and task required to run the jobs. 
 * `p-mysql-deployment` is the `p-mysql-deployment` GitHub [repo](https://github.com/pivotal-cf-experimental/p-mysql-deployment) that contains the deployment [manifest](https://github.com/pivotal-cf-experimental/p-mysql-deployment/blob/master/p-mysql-deployment.yml) for MySQL for PCF.
 * `mysql-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the MySQL for PCF deployment.
 * `cf-vars-store` is the variables store, retrieved from the GCS bucket, that contains the Cloud Foundry deployment credentials.
@@ -196,7 +196,7 @@ The second column in this part of the pipeline contains the `mysql-smoke-tests` 
 
 Both jobs run against the following resources:
 
-* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and tasks required to run the jobs. 
+* `pcf-bosh-ci` is the BOSH-Native PCF CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and tasks required to run the jobs. 
 * `bosh-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the BOSH Director.
 * `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
 * `mysql-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the MySQL for PCF deployment.
@@ -215,7 +215,7 @@ This part of the pipeline contains the following jobs:
 
 * `run-cats` runs two shell scripts. The [first](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/enable-diego-docker.sh) enables Docker-based applications to run on the Elastic Runtime deployment. The [second](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/run-cats.sh) executes CATS. The jobs run against the following resources:
 
-	* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and tasks required to run the jobs. 
+	* `pcf-bosh-ci` is the BOSH-Native PCF CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and tasks required to run the jobs. 
 	* `cf-acceptance-tests` is the CATS GitHub [repo](https://github.com/cloudfoundry/cf-acceptance-tests).
 	* `cf-vars-store` is the file that contains the Cloud Foundry deployment credentials, retrieved from the GCS bucket. 
 	* `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
@@ -223,7 +223,7 @@ This part of the pipeline contains the following jobs:
 * `run-rats` runs two shell scripts. The [first](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/fetch-routing-release.sh) clones the Cloud Foundry Routing release from its GitHub [repo](https://github.com/cloudfoundry-incubator/routing-release/). The [second](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/run-rats.sh) executes RATS. The jobs run against the following resources:
 
 
-	* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and tasks required to run the jobs. 
+	* `pcf-bosh-ci` is the BOSH-Native PCF CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and tasks required to run the jobs. 
 	* `cf-acceptance-tests` is the CATS GitHub [repo](https://github.com/cloudfoundry/cf-acceptance-tests).
 	* `cf-deployment` is the `cf-deployment` GitHub [repo](https://github.com/cloudfoundry/cf-deployment) that contains the Cloud Foundry deployment manifest.
 	* `cf-vars-store` is the file that contains the Cloud Foundry deployment credentials, retrieved from the GCS bucket. 
@@ -241,7 +241,7 @@ This part of the pipeline deletes the Elastic Runtime deployment.
 
 The `delete-ert` job runs a shell [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/delete-deployment.sh) that uses the BOSH CLI to delete the Elastic Runtime deployment. The job runs against the following resources:
 
-* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the script and task required to run the job.
+* `pcf-bosh-ci` is the BOSH-Native PCF CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the script and task required to run the job.
 * `bosh-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the BOSH Director. The `delete-deployment` script executes another [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/scripts/director-environment) that loads the credentials into the environment so that the BOSH CLI can delete the Elastic Runtime deployment.
 * `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
 
@@ -257,7 +257,7 @@ The screenshot below displays only the job that deletes MySQL for PCF.
 
 The `delete-mysql` job runs two shell scripts. The [first](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/run-errand.sh) uses the BOSH CLI to run the Broker Deregistrar errand, which deregisters the service broker from Elastic Runtime and removes the MySQL for PCF service plans from the Marketplace. The [second](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/tasks/delete-deployment.sh) uses the BOSH CLI to delete the MySQL for PCF deployment. The job runs against the following resources:
 
-* `pcf-bosh-ci` is the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and tasks required to run the job.
+* `pcf-bosh-ci` is the BOSH-Native PCF CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci/) that contains the scripts and tasks required to run the job.
 * `bosh-vars-store` is the variables store, retrieved from the GCS bucket, that contains variables and credentials for the BOSH Director. Both scripts execute another [script](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/scripts/director-environment) that loads the credentials into the environment so that the BOSH CLI can run the errand and delete the MySQL for PCF deployment.
 * `terraform-state` is the state file outputted by the `terraform-up` job that ran in a previous part of the pipeline, which uploaded the file to the GCS bucket. It contains information about the GCP environment.
 

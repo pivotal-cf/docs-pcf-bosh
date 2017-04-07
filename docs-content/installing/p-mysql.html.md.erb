@@ -1,6 +1,6 @@
 ---
 title: Configuring and Installing MySQL for PCF
-owner: PCF BOSH
+owner: BOSH-Native PCF
 ---
 
 <strong><%= modified_date %></strong>
@@ -50,7 +50,7 @@ This configuration assumes your Elastic Runtime variables store file is at `~/pc
 ## <a id='manifest'></a>Step 2: Prepare the Manifest
 
 1. Download the [deployment manifest](https://github.com/pivotal-cf-experimental/p-mysql-deployment/blob/master/p-mysql-deployment.yml) for MySQL for PCF. 
-1. Download the MySQL for PCF overrides [file](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/ops-files/p-mysql-overrides.yml) from the PCF BOSH CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci) and customize it as needed. The existing overrides file is written for a Google Cloud Platform (GCP) deployment, so you may need to modify it for your IaaS.
+1. Download the MySQL for PCF overrides [file](https://github.com/pivotal-cf/pcf-bosh-ci/blob/master/ops-files/p-mysql-overrides.yml) from the BOSH-Native PCF CI GitHub [repo](https://github.com/pivotal-cf/pcf-bosh-ci) and customize it as needed. The existing overrides file is written for a Google Cloud Platform (GCP) deployment, so you may need to modify it for your IaaS.
 1. Generate your base deployment manifest with `bosh interpolate`:
 	<pre class="terminal">
 	$ bosh interpolate -d p-mysql p-mysql-deployment.yml \
